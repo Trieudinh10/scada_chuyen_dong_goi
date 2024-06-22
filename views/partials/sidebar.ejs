@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="#" class="logo">
+            <!-- <i class='bx bx-code-alt'></i>
+                <div class="logo-name"><span>Thaco</span>Industries</div> -->
+            <img class="logo_id" src="images/logo_i.png">
+            <img src="images/logo_agri.png">
+        </a>
+        <ul class="side-menu">
+            <li><a href="/"><i class='bx bxs-dashboard'></i>Trang Chủ</a></li>
+            <li><a href="/diennang"><i class='bx bxs-zap'></i>Điện Năng</a></li>
+            <li><a href="/nhietdo"><i class='bx bxs-hot'></i>Nhiệt độ</a></li>
+            <li><a href="/dulieu"><i class='bx bxs-book'></i>Dữ liệu điện năng</a></li>
+
+            <li><a href="/dulieu_temp"><i class='bx bxs-data' ></i>Dữ liệu nhiệt độ</a></li>
+            <li><a href="/user"><i class='bx bx-group'></i>Người Dùng</a></li>
+
+        </ul>
+    </div>
+    <!-- End of Sidebar -->
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Navbar -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <li style="opacity: 0.7; font-weight: 500px; color: #07539D;">Welcome,!</li>
+            <input type="checkbox" id="theme-toggle" hidden>
+            <label for="theme-toggle" class="theme-toggle"></label>
+            <a href="#" class="notif">
+                <i class='bx bx-bell'></i>
+                <span class="count">12</span>
+            </a>
+            <a href="#" class="profile">
+                <img src="images/user.png">
+            </a>
+        </nav>
+        <!-- End of Navbar -->
+
+        <script src="/js/active.js"></script>
+</body>
+
+</html>
