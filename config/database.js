@@ -12,6 +12,19 @@ const mysql = require('mysql2/promise');
 //     database: process.env.DB_DATABASE
 //   });
 
+// So sánh dữ liệu giữa hai bảng
+const query = `
+SELECT t1.*
+FROM table1 t1
+LEFT JOIN table2 t2 ON t1.id = t2.id
+WHERE t2.id IS NULL
+UNION ALL
+SELECT t2.*
+FROM table2 t2
+LEFT JOIN table1 t1 ON t2.id = t1.id
+WHERE t1.id IS NULL;
+`;
+
   // create the connection to database
 const connection = mysql.createPool({
   host: process.env.DB_HOST,
