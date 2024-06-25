@@ -44,9 +44,8 @@ app.use('/change-lang/:lang', (req, res) => {
 app.use(indexRouter);
 
 
-const {fn_tag,fn_read_data_scan } = require('./public/js/fn_tag.js')
+const {fn_tag} = require('./public/js/fn_tag.js')
 
 fn_tag();
-fn_read_data_scan();
 
 

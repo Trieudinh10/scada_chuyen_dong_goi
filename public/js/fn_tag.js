@@ -63,6 +63,5 @@ setInterval(
 );
 
 module.exports = {
-    fn_tag,
-    fn_read_data_scan
+    fn_tag
 }
