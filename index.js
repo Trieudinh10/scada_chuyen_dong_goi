@@ -48,4 +48,6 @@ const {fn_tag} = require('./public/js/fn_tag.js')
 
 fn_tag();
 
+fn_tag();
+
 
