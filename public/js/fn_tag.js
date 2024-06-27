@@ -37,6 +37,8 @@ function valuesReady(anythingBad, values) {
     obj_tag_value = values;
 }
 
+let com_data = [];
+
 function fn_tag() {
     const data_keys = [
         "DATA", "DATA_1", "DATA_2", "DATA_3", "DATA_4", "DATA_5",
@@ -48,7 +50,7 @@ function fn_tag() {
     const other_keys = ["Trig_Data", "Response_data"];
     
     // Tạo com_data từ các biến DATA đến DATA_19 bằng cách ghép chúng lại thành một chuỗi
-    let com_data = data_keys.map(key => obj_tag_value[key] !== undefined ? obj_tag_value[key] : "").join('');
+    com_data = data_keys.map(key => obj_tag_value[key] !== undefined ? obj_tag_value[key] : "").join('');
     
     // In ra giá trị của com_data
     console.log("com_data", com_data);
@@ -66,6 +68,8 @@ function fn_tag() {
         io.sockets.emit(event, obj_tag_value[event]);
     });
 }
+fn_tag();
+console.log("com_dataABC", com_data);
 
 
 // Hàm chức năng scan giá trị
@@ -81,5 +85,7 @@ setInterval(
 );
 
 module.exports = {
-    fn_tag
+    fn_tag,
+    valuesReady,
+    obj_tag_value
 };

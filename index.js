@@ -45,3 +45,5 @@ app.use(indexRouter);
 
 const {fn_tag} = require('./public/js/fn_tag.js');
 fn_tag();
+const {plc_tag} = require('./public/js/sql.js')
+plc_tag();
