@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const sqlcon = require('../../config/database');
+const connection = require('../../config/database');
 const {fn_tag, valuesReady, obj_tag_value} = require('./fn_tag');
 fn_tag();
 valuesReady();
@@ -69,7 +69,7 @@ function plc_tag() {
             ;
             var str = str1 + str2 + ");";
             // ghi du lieu canh bao vao sql
-            sqlcon.query(str, function(err, result){
+            connection.query(str, function(err, result){
                 if (err){
                     console.log(err);
                 } else {}
