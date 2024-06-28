@@ -74,15 +74,88 @@ function fn_tag() {
     other_keys.forEach(event => {
         io.sockets.emit(event, obj_tag_value[event]);
     });
+    obj_tag_value["com_data"] = com_data;
+    io.sockets.emit("com_data", obj_tag_value["com_data"]);
 }
-fn_tag();
-console.log("com_dataABC", com_data);
+
+
+
+let old_com_data = "";
+let so_luong_box = "";
+
+
+let oldTrigData = 0;
+
+function plc_tag() {
+    const sqltable_Name = "plc_data";
+    // Lấy thời gian hiện tại
+    var toffset = (new Date()).getTimezoneOffset() * 60000; // Vùng Việt Nam GMT+7
+    var temp_datenow = new Date();
+    var timeNow = (new Date(temp_datenow - toffset)).toISOString().slice(0, -1).replace("T", " ");
+    var timeNow_toSQL = "'" + timeNow + "'";
+
+    // Dữ liệu đọc từ các tag
+    let so_luong_box = parseInt(obj_tag_value["so_luong_box"]) || 0;
+    let com_data = obj_tag_value["com_data"];
+
+    // Chèn dữ liệu mới khi com_data thay đổi
+    if (com_data !== old_com_data) {
+        var insertQuery = `INSERT INTO ${sqltable_Name} (date_time, so_luong_box, com_data) VALUES (${timeNow_toSQL}, '${so_luong_box}', '${com_data}');`;
+        connection.query(insertQuery, function(err, result) {
+            if (err) {
+                console.log('SQL Error:', err);
+            } else {
+                console.log('SQL Insert Result:', result);
+            }
+        });
+        old_com_data = com_data;
+    }
+
+    // Kiểm tra và cập nhật so_luong_box nếu Trig_Data chuyển từ 0 sang 1
+    if (obj_tag_value["Trig_Data"] === 1 && oldTrigData === 0) {
+        var updateQuery = `UPDATE ${sqltable_Name} SET so_luong_box = so_luong_box + 1 WHERE com_data = '${com_data}'`;
+        connection.query(updateQuery, function(err, result) {
+            if (err) {
+                console.log('SQL Error:', err);
+            } else {
+                console.log('SQL Update Result:', result);
+                // Cập nhật giá trị mới trong obj_tag_value sau khi cập nhật vào cơ sở dữ liệu
+                obj_tag_value["so_luong_box"] = so_luong_box + 1;
+                // Đặt lại giá trị Trig_Data về 0
+                obj_tag_value["Trig_Data"] = 0;
+                io.sockets.emit("Trig_Data", 0); // Gửi cập nhật qua socket nếu cần thiết
+            }
+        });
+    }
+
+    // Cập nhật oldTrigData để theo dõi trạng thái trước đó của Trig_Data
+    oldTrigData = obj_tag_value["Trig_Data"];
+}
+
+// HÀM GHI DỮ LIỆU XUỐNG PLC
+function valuesWritten(anythingBad) {
+    if (anythingBad) { console.log("SOMETHING WENT WRONG WRITING VALUES!!!!"); }
+    console.log("Done writing.");
+}
+
+// Nhận các bức điện được gửi từ trình duyệt
+io.on("connection", function(socket){
+    // Bật tắt động cơ M1
+        socket.on("Trig_Data", function(data){
+        conn_plc.writeItems('Trig_Data', data, valuesWritten);
+});
+});
+
+
+
+
 
 
 // Hàm chức năng scan giá trị
 function fn_read_data_scan() {
     conn_plc.readAllItems(valuesReady);
     fn_tag();
+    plc_tag();
 }
 
 // Time cập nhật mỗi 1s
