@@ -67,22 +67,9 @@ function fn_tag() {
     other_keys.forEach(event => {
         io.sockets.emit(event, obj_tag_value[event]);
     });
+    obj_tag_value["com_data"] = com_data;
+    io.sockets.emit("com_data", obj_tag_value["com_data"]);
 }
-fn_tag();
-console.log("com_dataABC", com_data);
-
-
-// Hàm chức năng scan giá trị
-function fn_read_data_scan() {
-    conn_plc.readAllItems(valuesReady);
-    fn_tag();
-}
-
-// Time cập nhật mỗi 1s
-setInterval(
-    () => fn_read_data_scan(),
-    1000 // 1s = 1000ms
-);
 
 module.exports = {
     fn_tag,
