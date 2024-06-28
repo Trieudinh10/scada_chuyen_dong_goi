@@ -165,8 +165,6 @@ setInterval(
 
 
 
-
-
 // // Khởi tạo SQL
 // var mysql = require('mysql2');
 
