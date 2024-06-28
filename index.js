@@ -165,6 +165,8 @@ setInterval(
 
 
 
+
+
 // // Khởi tạo SQL
 // var mysql = require('mysql2');
 
@@ -179,7 +181,7 @@ setInterval(
 
 const connection = require('./config/database');
 
-let old_com_data = "";
+let old_DATA_19 = "";
 function plc_tag() {
     const sqltable_Name = "plc_data";
     // Lấy thời gian hiện tại
@@ -213,7 +215,7 @@ function plc_tag() {
     let Response_data = "'" + obj_tag_value["Response_data"] + "',";
     let com_data = "'" + obj_tag_value["com_data"] + "'";
 
-    if (com_data !== old_com_data) {
+    if (DATA_19 !== old_DATA_19) {
         // Chèn dữ liệu vào SQL
         var str1 = "INSERT INTO " + sqltable_Name + "(date_time, DATA, DATA_1, DATA_2, DATA_3, DATA_4, DATA_5, DATA_6, DATA_7, DATA_8, DATA_9, DATA_10, DATA_11, DATA_12, DATA_13, DATA_14, DATA_15, DATA_16, DATA_17, DATA_18, DATA_19, Trig_Data, Response_data,com_data) VALUES (";
         var str2 = timeNow_toSQL
@@ -255,6 +257,6 @@ function plc_tag() {
             }
         });
 
-        old_com_data = com_data;
+        old_DATA_19 = DATA_19;
     }
 }
