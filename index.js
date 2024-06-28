@@ -43,6 +43,20 @@ app.use('/change-lang/:lang', (req, res) => {
 // app.use(authRouter);
 app.use(indexRouter);
 
-const {fn_tag, plc_tag} = require('./public/js/fn_tag.js');
+const {fn_tag, plc_tag } = require('./public/js/fn_tag.js');
 fn_tag();
 plc_tag();
+
+// HÀM GHI DỮ LIỆU XUỐNG PLC
+function valuesWritten(anythingBad) {
+  if (anythingBad) { console.log("SOMETHING WENT WRONG WRITING VALUES!!!!"); }
+  console.log("Done writing.");
+}
+
+// Nhận các bức điện được gửi từ trình duyệt
+io.on("connection", function(socket){
+  // Bật tắt động cơ M1
+      socket.on("Trig_Data", function(data){
+      conn_plc.writeItems('Trig_Data', data, valuesWritten);
+});
+});

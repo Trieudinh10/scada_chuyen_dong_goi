@@ -48,7 +48,7 @@ function fn_tag() {
         "DATA_16", "DATA_17", "DATA_18", "DATA_19"
     ];
     
-    const other_keys = ["Trig_Data", "Response_data"];
+    const other_keys = ["Trig_Data"];
     
     // Kiểm tra obj_tag_value trước khi truy cập
     if (!obj_tag_value) {
@@ -81,84 +81,75 @@ function fn_tag() {
 
 
 let old_com_data = "";
+let so_luong_box = "";
+
+
+let oldTrigData = 0;
+
 function plc_tag() {
     const sqltable_Name = "plc_data";
     // Lấy thời gian hiện tại
     var toffset = (new Date()).getTimezoneOffset() * 60000; // Vùng Việt Nam GMT+7
     var temp_datenow = new Date();
     var timeNow = (new Date(temp_datenow - toffset)).toISOString().slice(0, -1).replace("T", " ");
-    var timeNow_toSQL = "'" + timeNow + "',";
+    var timeNow_toSQL = "'" + timeNow + "'";
 
     // Dữ liệu đọc từ các tag
-    let DATA = "'" + obj_tag_value["DATA"] + "',";
-    let DATA_1 = "'" + obj_tag_value["DATA_1"] + "',";
-    let DATA_2 = "'" + obj_tag_value["DATA_2"] + "',";
-    let DATA_3 = "'" + obj_tag_value["DATA_3"] + "',";
-    let DATA_4 = "'" + obj_tag_value["DATA_4"] + "',";
-    let DATA_5 = "'" + obj_tag_value["DATA_5"] + "',";
-    let DATA_6 = "'" + obj_tag_value["DATA_6"] + "',";
-    let DATA_7 = "'" + obj_tag_value["DATA_7"] + "',";
-    let DATA_8 = "'" + obj_tag_value["DATA_8"] + "',";
-    let DATA_9 = "'" + obj_tag_value["DATA_9"] + "',";
-    let DATA_10 = "'" + obj_tag_value["DATA_10"] + "',";
-    let DATA_11 = "'" + obj_tag_value["DATA_11"] + "',";
-    let DATA_12 = "'" + obj_tag_value["DATA_12"] + "',";
-    let DATA_13 = "'" + obj_tag_value["DATA_13"] + "',";
-    let DATA_14 = "'" + obj_tag_value["DATA_14"] + "',";
-    let DATA_15 = "'" + obj_tag_value["DATA_15"] + "',";
-    let DATA_16 = "'" + obj_tag_value["DATA_16"] + "',";
-    let DATA_17 = "'" + obj_tag_value["DATA_17"] + "',";
-    let DATA_18 = "'" + obj_tag_value["DATA_18"] + "',";
-    let DATA_19 = "'" + obj_tag_value["DATA_19"] + "',";
-    let Trig_Data = "'" + obj_tag_value["Trig_Data"] + "',";
-    let Response_data = "'" + obj_tag_value["Response_data"] + "',";
-    let com_data = "'" + obj_tag_value["com_data"] + "'";
+    let so_luong_box = parseInt(obj_tag_value["so_luong_box"]) || 0;
+    let com_data = obj_tag_value["com_data"];
 
+    // Chèn dữ liệu mới khi com_data thay đổi
     if (com_data !== old_com_data) {
-        // Chèn dữ liệu vào SQL
-        var str1 = "INSERT INTO " + sqltable_Name + "(date_time, DATA, DATA_1, DATA_2, DATA_3, DATA_4, DATA_5, DATA_6, DATA_7, DATA_8, DATA_9, DATA_10, DATA_11, DATA_12, DATA_13, DATA_14, DATA_15, DATA_16, DATA_17, DATA_18, DATA_19, Trig_Data, Response_data,com_data) VALUES (";
-        var str2 = timeNow_toSQL
-            + DATA
-            + DATA_1
-            + DATA_2
-            + DATA_3
-            + DATA_4
-            + DATA_5
-            + DATA_6
-            + DATA_7
-            + DATA_8
-            + DATA_9
-            + DATA_10
-            + DATA_11
-            + DATA_12
-            + DATA_13
-            + DATA_14
-            + DATA_15
-            + DATA_16
-            + DATA_17
-            + DATA_18
-            + DATA_19
-            + Trig_Data
-            + Response_data
-            + com_data
-            ;
- 
-
-        var str = str1 + str2 + ");";
-        console.log(str); // Kiểm tra câu lệnh SQL
-
-        // Ghi dữ liệu vào SQL
-        connection.query(str, function(err, result) {
+        var insertQuery = `INSERT INTO ${sqltable_Name} (date_time, so_luong_box, com_data) VALUES (${timeNow_toSQL}, '${so_luong_box}', '${com_data}');`;
+        connection.query(insertQuery, function(err, result) {
             if (err) {
                 console.log('SQL Error:', err);
             } else {
-                console.log('SQL Result:', result);
+                console.log('SQL Insert Result:', result);
             }
         });
-
         old_com_data = com_data;
     }
+
+    // Kiểm tra và cập nhật so_luong_box nếu Trig_Data chuyển từ 0 sang 1
+    if (obj_tag_value["Trig_Data"] === 1 && oldTrigData === 0) {
+        var updateQuery = `UPDATE ${sqltable_Name} SET so_luong_box = so_luong_box + 1 WHERE com_data = '${com_data}'`;
+        connection.query(updateQuery, function(err, result) {
+            if (err) {
+                console.log('SQL Error:', err);
+            } else {
+                console.log('SQL Update Result:', result);
+                // Cập nhật giá trị mới trong obj_tag_value sau khi cập nhật vào cơ sở dữ liệu
+                obj_tag_value["so_luong_box"] = so_luong_box + 1;
+                // Đặt lại giá trị Trig_Data về 0
+                obj_tag_value["Trig_Data"] = 0;
+                io.sockets.emit("Trig_Data", 0); // Gửi cập nhật qua socket nếu cần thiết
+            }
+        });
+    }
+
+    // Cập nhật oldTrigData để theo dõi trạng thái trước đó của Trig_Data
+    oldTrigData = obj_tag_value["Trig_Data"];
 }
+
+// // HÀM GHI DỮ LIỆU XUỐNG PLC
+// function valuesWritten(anythingBad) {
+//     if (anythingBad) { console.log("SOMETHING WENT WRONG WRITING VALUES!!!!"); }
+//     console.log("Done writing.");
+// }
+
+// // Nhận các bức điện được gửi từ trình duyệt
+// io.on("connection", function(socket){
+//     // Bật tắt động cơ M1
+//         socket.on("Trig_Data", function(data){
+//         conn_plc.writeItems('Trig_Data', data, valuesWritten);
+// });
+// });
+
+
+
+
+
 
 // Hàm chức năng scan giá trị
 function fn_read_data_scan() {
