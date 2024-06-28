@@ -84,7 +84,7 @@ function plc_tag() {
         old_DATA_19 = DATA_19;
     }
 }
-
+plc_tag();
 module.exports = {
     plc_tag
 }
