@@ -49,6 +49,12 @@ function fn_tag() {
     
     const other_keys = ["Trig_Data", "Response_data"];
     
+    // Kiểm tra obj_tag_value trước khi truy cập
+    if (!obj_tag_value) {
+        console.log("obj_tag_value is undefined");
+        return;
+    }
+
     // Tạo com_data từ các biến DATA đến DATA_19 bằng cách ghép chúng lại thành một chuỗi
     com_data = data_keys.map(key => obj_tag_value[key] !== undefined ? obj_tag_value[key] : "").join('');
     
@@ -67,9 +73,10 @@ function fn_tag() {
     other_keys.forEach(event => {
         io.sockets.emit(event, obj_tag_value[event]);
     });
+    obj_tag_value["com_data"] = com_data;
+    io.sockets.emit("com_data", obj_tag_value["com_data"]);
 }
-fn_tag();
-console.log("com_dataABC", com_data);
+
 
 
 // Hàm chức năng scan giá trị
