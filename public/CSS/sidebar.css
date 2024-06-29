@@ -569,8 +569,8 @@ body{
 }
 
 .logo_id{
-    width: 10px;
-    margin: 0 25px;
+    width: 50px;
+    margin: 0 5px;
 }
 
 @media screen and (max-width: 768px) {
