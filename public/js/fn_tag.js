@@ -4,6 +4,15 @@ const connection = require('../../config/database');
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
 
+
+// Nhận các bức điện được gửi từ trình duyệt
+io.on("connection", function(socket){
+    // Bật tắt động cơ M1
+        socket.on("Client-send-cmdM1", function(data){
+        conn_plc.writeItems('test', data, valuesWritten);
+  });
+  });
+
 // KHỞI TẠO KẾT NỐI PLC
 var nodes7 = require('nodes7');
 var conn_plc = new nodes7; // PLC1
@@ -45,7 +54,7 @@ function fn_tag() {
         "DATA", "DATA_1", "DATA_2", "DATA_3", "DATA_4", "DATA_5",
         "DATA_6", "DATA_7", "DATA_8", "DATA_9", "DATA_10",
         "DATA_11", "DATA_12", "DATA_13", "DATA_14", "DATA_15",
-        "DATA_16", "DATA_17", "DATA_18", "DATA_19"
+        "DATA_16", "DATA_17", "DATA_18", "DATA_19", "test"
     ];
     
     const other_keys = ["Trig_Data"];
@@ -132,19 +141,7 @@ function plc_tag() {
     oldTrigData = obj_tag_value["Trig_Data"];
 }
 
-// HÀM GHI DỮ LIỆU XUỐNG PLC
-function valuesWritten(anythingBad) {
-    if (anythingBad) { console.log("SOMETHING WENT WRONG WRITING VALUES!!!!"); }
-    console.log("Done writing.");
-}
 
-// Nhận các bức điện được gửi từ trình duyệt
-io.on("connection", function(socket){
-    // Bật tắt động cơ M1
-        socket.on("Trig_Data", function(data){
-        conn_plc.writeItems('Trig_Data', data, valuesWritten);
-});
-});
 
 // Hàm chức năng scan giá trị
 function fn_read_data_scan() {

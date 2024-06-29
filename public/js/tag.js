@@ -25,5 +25,6 @@ var tags_list = {
     DATA_17: 'DB1,BYTE17',
     DATA_18: 'DB1,BYTE18',
     DATA_19: 'DB1,BYTE19',
-    Trig_Data: 'DB1,INT20'
+    Trig_Data: 'DB1,INT20',
+    test: 'DB1,X22.0'
 }

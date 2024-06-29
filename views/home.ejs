@@ -4,18 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src = "jquery.js"></script>
+    <script src = "socket.io/socket.io.js"></script>
+
 </head>
+<script>
+    var socket = io(document.location.host);
+  </script>
 <body>
     <%- include ('./partials/sidebar') %>
    <p class="content"><%= __('Chào mừng') %></p>
    <p class="content">Quyết định của bạn nên dựa trên những gì bạn cảm thấy là tốt nhất cho nhóm. Nếu bạn cảm thấy rằng việc không cho Tưn Rờ Đê trở lại nhóm sẽ giúp duy trì hòa khí và sự hiệu quả trong nhóm, thì đó có thể là lựa chọn đúng đắn. Đôi khi, việc giữ vững nguyên tắc và ranh giới có thể quan trọng hơn việc cố gắng làm hài lòng mọi người. Chúc bạn may mắn và hy vọng mọi việc sẽ diễn ra suôn sẻ với nhóm của bạn.</p>
 <!-- Phần thân của website -->
-<body>
     <!-- Nút nhấn chạy động cơ -->
         <button id="btt_RUN_M1" onclick= "socket.emit('Client-send-cmdM1', true);">RUN MOTOR 1</button>
     <!-- Nút nhấn dừng động cơ -->
         <button id="btt_STOP_M1" onclick= "socket.emit('Client-send-cmdM1', false);">STOP MOTOR 1</button>
-    </body>
+
 
    
 </body>
