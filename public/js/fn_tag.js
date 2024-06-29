@@ -146,11 +146,6 @@ io.on("connection", function(socket){
 });
 });
 
-
-
-
-
-
 // Hàm chức năng scan giá trị
 function fn_read_data_scan() {
     conn_plc.readAllItems(valuesReady);
