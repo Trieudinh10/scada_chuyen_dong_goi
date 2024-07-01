@@ -47,11 +47,8 @@ app.use(indexRouter);
 // fn_tag();
 // plc_tag();
 
-
-
 ///////////////////////////////////////////////////////////////////////////
 const connection = require('./config/database');
-
 
 // KHỞI TẠO KẾT NỐI PLC
 var nodes7 = require('nodes7');
@@ -142,7 +139,7 @@ function fn_tag() {
 
 
 let old_com_data = "";
-let so_luong_box = 0;
+let so_luong_box = 1;
 let oldTrigData = 0;
 
 function plc_tag() {

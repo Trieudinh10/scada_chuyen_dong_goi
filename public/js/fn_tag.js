@@ -90,9 +90,6 @@ function fn_tag() {
 
 
 let old_com_data = "";
-let so_luong_box = "";
-
-
 let oldTrigData = 0;
 
 function plc_tag() {
