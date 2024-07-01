@@ -107,10 +107,10 @@ function fn_tag() {
       "DATA", "DATA_1", "DATA_2", "DATA_3", "DATA_4", "DATA_5",
       "DATA_6", "DATA_7", "DATA_8", "DATA_9", "DATA_10",
       "DATA_11", "DATA_12", "DATA_13", "DATA_14", "DATA_15",
-      "DATA_16", "DATA_17", "DATA_18", "DATA_19", "test"
+      "DATA_16", "DATA_17", "DATA_18", "DATA_19"
   ];
   
-  const other_keys = ["Trig_Data"];
+  const other_keys = ["Trig_Data", "test"];
   
   // Kiểm tra obj_tag_value trước khi truy cập
   if (!obj_tag_value) {
@@ -142,7 +142,7 @@ function fn_tag() {
 
 
 let old_com_data = "";
-let so_luong_box = "";
+let so_luong_box = 0;
 let oldTrigData = 0;
 
 function plc_tag() {
@@ -154,7 +154,7 @@ function plc_tag() {
   var timeNow_toSQL = "'" + timeNow + "'";
 
   // Dữ liệu đọc từ các tag
-  let so_luong_box = parseInt(obj_tag_value["so_luong_box"]) || 0;
+  so_luong_box = parseInt(obj_tag_value["so_luong_box"]) || 0;
   let com_data = obj_tag_value["com_data"];
 
   // Chèn dữ liệu mới khi com_data thay đổi
@@ -179,29 +179,36 @@ function plc_tag() {
           } else {
               console.log('SQL Update Result:', result);
               // Cập nhật giá trị mới trong obj_tag_value sau khi cập nhật vào cơ sở dữ liệu
-              obj_tag_value["so_luong_box"] = so_luong_box + 1;
+              so_luong_box += 1;
+              obj_tag_value["so_luong_box"] = so_luong_box;
               // Đặt lại giá trị Trig_Data về 0
               obj_tag_value["Trig_Data"] = 0;
               io.sockets.emit("Trig_Data", 0); // Gửi cập nhật qua socket nếu cần thiết
+              // Ghi dữ liệu xuống PLC
+              conn_plc.writeItems('Trig_Data', 0, valuesWritten);
           }
       });
   }
 
   // Cập nhật oldTrigData để theo dõi trạng thái trước đó của Trig_Data
   oldTrigData = obj_tag_value["Trig_Data"];
+  console.log('oldTrigData:', oldTrigData);
 }
 
 // HÀM GHI DỮ LIỆU XUỐNG PLC
 function valuesWritten(anythingBad) {
-  if (anythingBad) { console.log("SOMETHING WENT WRONG WRITING VALUES!!!!"); }
+  if (anythingBad) { 
+    console.log("SOMETHING WENT WRONG WRITING VALUES!!!!"); 
+  }
   console.log("Done writing.");
 }
 
 // Nhận các bức điện được gửi từ trình duyệt
 io.on("connection", function(socket){
   // Bật tắt động cơ M1
-      socket.on("Client-send-cmdM1", function(data){
+  socket.on("Client-send-cmdM1", function(data){
       conn_plc.writeItems('test', data, valuesWritten);
+  });
 });
-});
+
 
