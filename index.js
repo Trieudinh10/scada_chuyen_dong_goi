@@ -47,8 +47,55 @@ app.use(indexRouter);
 // fn_tag();
 // plc_tag();
 
-///////////////////////////////////////////////////////////////////////////
+
 const connection = require('./config/database');
+
+///////////////////////////////////////////////////////////////////////////////
+const multer = require('multer');
+const xlsx = require('xlsx');
+const upload = multer({ dest: 'uploads/' });
+
+connection.connect(err => {
+  if (err) {
+    console.error('Database connection failed:', err.stack);
+    return;
+  }
+  console.log('Connected to database.');
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.post('/upload', upload.single('excelFile'), (req, res) => {
+  const filePath = req.file.path;
+  const workbook = xlsx.readFile(filePath);
+  const sheetName = workbook.SheetNames[0];
+  const sheet = workbook.Sheets[sheetName];
+  const data = xlsx.utils.sheet_to_json(sheet);
+
+  res.json(data);
+});
+
+app.post('/save', (req, res) => {
+  const data = req.body;
+
+  data.forEach(row => {
+    const query = 'INSERT INTO import_excel (colum1, colum2, colum3) VALUES (?, ?, ?)';
+    const values = [row['colum1'], row['colum2'], row['colum3']];
+    connection.query(query, values, (err, result) => {
+      if (err) {
+        console.error('Error inserting data:', err.stack);
+      } else {
+        console.log('Data inserted successfully:', result);
+      }
+    });
+  });
+
+  res.send('Data saved to database successfully.');
+});
+
+
+///////////////////////////////////////////////////////////////////////////
+
 
 // KHỞI TẠO KẾT NỐI PLC
 var nodes7 = require('nodes7');
@@ -94,7 +141,7 @@ function fn_read_data_scan() {
 // Time cập nhật mỗi 1s
 setInterval(
   () => fn_read_data_scan(),
-  1000 // 1s = 1000ms
+  1000// 1s = 1000ms
 );
 
 let com_data = [];

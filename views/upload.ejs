@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload and Display Excel File</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <%- include ('./partials/sidebar') %>
+  <h1>Upload Excel File</h1>
+  <form id="uploadForm">
+    <input type="file" id="excelFile" name="excelFile" accept=".xlsx, .xls">
+    <button type="submit">Upload</button>
+  </form>
+  <div id="message"></div>
+  <div id="tableContainer"></div>
+  <button id="saveButton" style="display: none;">Save</button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var file = document.getElementById('excelFile').files[0];
+      if (!file) {
+        document.getElementById('message').innerText = 'Please select a file first.';
+        return;
+      }
+
+      var formData = new FormData();
+      formData.append('excelFile', file);
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        var htmlString = '<table><thead><tr>';
+        Object.keys(data[0]).forEach(key => {
+          htmlString += '<th>' + key + '</th>';
+        });
+        htmlString += '</tr></thead><tbody>';
+        data.forEach(row => {
+          htmlString += '<tr>';
+          Object.values(row).forEach(value => {
+            htmlString += '<td>' + value + '</td>';
+          });
+          htmlString += '</tr>';
+        });
+        htmlString += '</tbody></table>';
+        document.getElementById('tableContainer').innerHTML = htmlString;
+        document.getElementById('saveButton').style.display = 'inline';
+      })
+      .catch(error => {
+        console.error('Error uploading file:', error);
+        document.getElementById('message').innerText = 'Error uploading file.';
+      });
+    });
+
+    document.getElementById('saveButton').addEventListener('click', function() {
+      var table = document.querySelector('#tableContainer table');
+      var rows = table.querySelectorAll('tbody tr');
+      var data = Array.from(rows).map(row => {
+        var cells = row.querySelectorAll('td');
+        var obj = {};
+        cells.forEach((cell, i) => {
+          obj[table.querySelectorAll('th')[i].innerText] = cell.innerText;
+        });
+        return obj;
+      });
+
+      fetch('/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.text())
+      .then(message => {
+        document.getElementById('message').innerText = message;
+      })
+      .catch(error => {
+        console.error('Error saving data:', error);
+        document.getElementById('message').innerText = 'Error saving data.';
+      });
+    });
+  </script>
+</body>
+</html>
