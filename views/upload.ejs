@@ -22,13 +22,13 @@
 <body>
   <%- include ('./partials/sidebar') %>
   <h1>Upload Excel File</h1>
-  <form id="uploadForm">
+  <form id="uploadForm" class="form-inline">
     <input type="file" id="excelFile" name="excelFile" accept=".xlsx, .xls">
     <button type="submit">Upload</button>
+    <button type="button" id="saveButton" style="display: none;">Save</button>
   </form>
   <div id="message"></div>
   <div id="tableContainer"></div>
-  <button id="saveButton" style="display: none;">Save</button>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
   <script>
