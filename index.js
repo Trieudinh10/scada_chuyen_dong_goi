@@ -51,17 +51,17 @@ app.use(indexRouter);
 const connection = require('./config/database');
 
 ///////////////////////////////////////////////////////////////////////////////
-const multer = require('multer');
-const xlsx = require('xlsx');
-const upload = multer({ dest: 'uploads/' });
-
 connection.connect(err => {
   if (err) {
-    console.error('Database connection failed:', err.stack);
-    return;
+      console.error('Database connection failed:', err.stack);
+      return;
   }
   console.log('Connected to database.');
 });
+
+const multer = require('multer');
+const xlsx = require('xlsx');
+const upload = multer({ dest: 'uploads/' });
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -72,25 +72,23 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
   const sheet = workbook.Sheets[sheetName];
   const data = xlsx.utils.sheet_to_json(sheet);
 
-  res.json(data);
-});
-
-app.post('/save', (req, res) => {
-  const data = req.body;
-
   data.forEach(row => {
-    const query = 'INSERT INTO import_excel (colum1, colum2, colum3) VALUES (?, ?, ?)';
-    const values = [row['colum1'], row['colum2'], row['colum3']];
-    connection.query(query, values, (err, result) => {
-      if (err) {
-        console.error('Error inserting data:', err.stack);
-      } else {
-        console.log('Data inserted successfully:', result);
-      }
-    });
-  });
-
-  res.send('Data saved to database successfully.');
+    if (row['colum1'] && row['colum2'] && row['colum3']) {
+        const query = 'INSERT INTO import_excel (colum1, colum2, colum3) VALUES (?, ?, ?)';
+        const values = [row['colum1'], row['colum2'], row['colum3']];
+        connection.query(query, values, (err, result) => {
+            if (err) {
+                console.error('Error inserting data:', err.stack);
+                res.status(500).send('Error inserting data: ' + err.message);
+                return;
+            }
+        });
+    } else {
+        console.warn('Skipped row due to missing data:', row);
+        res.send('File no match.');
+    }
+});
+  res.send('File uploaded successful to database.');
 });
 
 

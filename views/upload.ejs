@@ -1,104 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload and Display Excel File</title>
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    table, th, td {
-      border: 1px solid black;
-    }
-    th, td {
-      padding: 10px;
-      text-align: left;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Display Excel File</title>
+    <style>
+        .form-inline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-  <%- include ('./partials/sidebar') %>
-  <h1>Upload Excel File</h1>
-  <form id="uploadForm" class="form-inline">
-    <input type="file" id="excelFile" name="excelFile" accept=".xlsx, .xls">
-    <button type="submit">Upload</button>
-    <button type="button" id="saveButton" style="display: none;">Save</button>
-  </form>
-  <div id="message"></div>
-  <div id="tableContainer"></div>
+    <%- include ('./partials/sidebar') %>
+    <h1>Upload Excel File</h1>
+    <form id="uploadForm" enctype="multipart/form-data" class="form-inline">
+        <input type="file" id="excelFile" name="excelFile" accept=".xlsx, .xls">
+        <button type="button" id="uploadButton">Upload</button>
+        <button type="button" id="saveButton" style="display: none;">Save to MySQL</button>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
-  <script>
-    document.getElementById('uploadForm').addEventListener('submit', function(event) {
-      event.preventDefault();
-      var file = document.getElementById('excelFile').files[0];
-      if (!file) {
-        document.getElementById('message').innerText = 'Please select a file first.';
-        return;
-      }
+    </form>
+    <div id="message"></div>
+    <div id="tableContainer"></div>
 
-      var formData = new FormData();
-      formData.append('excelFile', file);
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            var file = document.getElementById('excelFile').files[0];
+            if (!file) {
+                document.getElementById('message').innerText = 'Please select a file first.';
+                return;
+            }
 
-      fetch('/upload', {
-        method: 'POST',
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        var htmlString = '<table><thead><tr>';
-        Object.keys(data[0]).forEach(key => {
-          htmlString += '<th>' + key + '</th>';
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var data = new Uint8Array(e.target.result);
+                var workbook = XLSX.read(data, {type: 'array'});
+                var sheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[sheetName];
+                var htmlString = XLSX.utils.sheet_to_html(worksheet);
+
+                document.getElementById('tableContainer').innerHTML = htmlString;
+                document.getElementById('saveButton').style.display = 'block';
+            };
+            reader.readAsArrayBuffer(file);
         });
-        htmlString += '</tr></thead><tbody>';
-        data.forEach(row => {
-          htmlString += '<tr>';
-          Object.values(row).forEach(value => {
-            htmlString += '<td>' + value + '</td>';
-          });
-          htmlString += '</tr>';
-        });
-        htmlString += '</tbody></table>';
-        document.getElementById('tableContainer').innerHTML = htmlString;
-        document.getElementById('saveButton').style.display = 'inline';
-      })
-      .catch(error => {
-        console.error('Error uploading file:', error);
-        document.getElementById('message').innerText = 'Error uploading file.';
-      });
-    });
 
-    document.getElementById('saveButton').addEventListener('click', function() {
-      var table = document.querySelector('#tableContainer table');
-      var rows = table.querySelectorAll('tbody tr');
-      var data = Array.from(rows).map(row => {
-        var cells = row.querySelectorAll('td');
-        var obj = {};
-        cells.forEach((cell, i) => {
-          obj[table.querySelectorAll('th')[i].innerText] = cell.innerText;
+        document.getElementById('saveButton').addEventListener('click', function() {
+            var file = document.getElementById('excelFile').files[0];
+            var formData = new FormData();
+            formData.append('excelFile', file);
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(result => {
+                document.getElementById('message').innerText = result;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
-        return obj;
-      });
-
-      fetch('/save', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      .then(response => response.text())
-      .then(message => {
-        document.getElementById('message').innerText = message;
-      })
-      .catch(error => {
-        console.error('Error saving data:', error);
-        document.getElementById('message').innerText = 'Error saving data.';
-      });
-    });
-  </script>
+    </script>
 </body>
 </html>
