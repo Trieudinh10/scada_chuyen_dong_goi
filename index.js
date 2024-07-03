@@ -32,7 +32,7 @@ server.listen(PORT, () => {
 i18n.configure({
   locales:['en', 'vi'],
   directory: __dirname + '/locales',
- cookie: 'lang',
+  cookie: 'lang',
  });
 app.use('/change-lang/:lang', (req, res) => { 
   res.cookie('lang', req.params.lang, { maxAge: 900000 });
