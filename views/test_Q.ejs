@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/test_Q.css">
+    <title>TEST</title>
+    <script src = "js/FC_Common.js"></script>
+    <script src = "js/fn_show.js"></script>
+    <script src = "socket.io/socket.io.js"></script>
+    <script src = "js/jquery-3.6.0.min.js"></script>
+    <script src = "js/FileSaver.js"></script> 
+     
+    <script>
+        var socket = io()  
+    </script>
+</head>
+
+<body>
+    <%- include ('./partials/sidebar') %>
+        <div class="cnt_">
+            <div class="block_">
+                <div class="item_">
+                    <%= __('Part No') %>:
+                </div>
+                <div class="item_">
+                    <input id="value_com" class="iofield_" disabled="disabled" type="text" />
+                    <script>
+                        fn_IOField("com_data","value_com");
+                      
+                    </script>
+                </div>
+                
+
+                <div class="item_">
+                    <input id="value_data" class="iofield_" disabled="disabled" type="text" />
+                    <script>
+                        fn_IOField("DATA","value_data");
+                    </script>
+                </div>
+                <div class="item_">
+                    <input id="value_data_1" class="iofield_" disabled="disabled" type="text" />
+                    <script>
+                        fn_IOField("DATA_1","value_data_1");
+                    </script>
+                </div>
+
+                <div class="item_">
+                    <img id="stt_"   alt="" class="cont_img">
+                    <script>
+                        fn_SymbolStatus("Trig_Data","status","stt_");
+                    </script>
+                </div>
+            </div>
+            
+            <div class="block_">
+                <!-- <img id="loadingImage" class="img_loading" src="/images/dev_Q/loading.png" /> -->
+                <div id="div_table_plc_data">
+                    <table id="table_plc_data">
+                        <thead>
+                            <tr>
+                                <th >
+                                    <%= __('Time') %>
+                                </th>
+                                <th >
+                                    <%= __('Number of boxes') %>
+                                </th>
+                                <th >
+                                    <%= __('Part No') %>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div class="block_">
+                <!-- <img id="loadingImage1" class="img_loading" src="/images/dev_Q/loading.png" /> -->
+                <div id="div_table_import">
+                    <table id="table_import">
+                        <thead>
+                            <tr>
+                                <th >
+                                    <%= __('Case No') %>
+                                </th>
+                                <th >
+                                    <%= __('Part No') %>
+                                </th>
+                                <th >
+                                    <%= __('Number of boxes') %>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>

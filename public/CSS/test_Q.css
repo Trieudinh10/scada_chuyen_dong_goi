@@ -1,0 +1,261 @@
+.cnt_ {
+  /* width: 1686px; */
+  height: 897px;
+  /* height: 100%; */
+  /* background-color: bisque; */
+  display: flex;
+  /* align-items: center;
+    justify-content: center; */
+}
+.block_ {
+  height: 50%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border: 1px solid black;
+  margin-right: 5px;
+}
+.block_:first-child{
+  /* background-color: aquamarine; */
+  flex-direction: column;
+  width: 20%;
+}
+.block_:nth-child(2){
+  /* background-color: #cccccc; */
+  width: 40%;
+}
+.block_:last-child{
+  /* background-color: pink; */
+  width: 40%;
+  margin-right: 0px;
+}
+.iofield_ {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-size: 20px;
+  color: black;
+  border: 1px solid black;
+  background-color: white;
+
+}
+.item_ {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 5px;
+  height: 100%;
+}
+/* .item_:first-child{
+  width: 35%;
+}
+.item_:nth-child(2){
+  width: 100%;
+}
+.item_:last-child{
+  width: 15%;
+} */
+.cont_img {
+  width: 30%;
+}
+ 
+/* --------------------------------table------------------------- */
+
+
+#div_table_plc_data,
+#div_table_import{
+  overflow-y: scroll;
+  width: 100%;
+  height: 100%;
+}
+
+#table_plc_data,
+#table_import{
+  text-align: center;
+  border-collapse: collapse;
+  width: 100%;
+}
+#table_plc_data tr,
+#table_import tr{
+  cursor: pointer;
+}
+
+#table_plc_data tr:hover td,
+#table_import tr:hover td{
+  background-color: #19cece;
+}
+#table_plc_data thead th,
+#table_import thead th{
+  position: sticky;
+  top: -1px;
+  border: 1px solid black;
+}
+#table_plc_data th,
+#table_import th{
+  background: #F0F4F9;
+  border: 1px solid black;
+  padding: 5px 2px;
+  font-size: 15px;
+  width: 33%;
+}
+#table_plc_data td,
+#table_import td{
+  width: 70px;
+  border: 1px solid rgb(0, 0, 0);
+  padding: 5px 2px;
+  font-size: 15px;
+}
+#table_plc_data td:last-child,
+#table_import td:last-child{
+  text-align: left;
+  padding-left: 10px;
+}
+
+.thanh_trichxuat_sb_error {
+  width: 100%;
+  height: 86px;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  padding: 15px 30px;
+  justify-content: space-between;
+}
+
+.row-flex {
+  display: flex;
+  align-items: flex-end;
+}
+
+.start_end_sb_error {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+.lable_sb_error {
+  margin-bottom: 5px;
+  font-size: 13px;
+  color: gray;
+}
+
+.dtpk_sb_error {
+  font-size: 0.875rem;
+  height: 35px;
+  border-radius: 6px;
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.btt_trich_xuat_sb_error {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 10px;
+  color: rgb(255, 255, 255);
+  border: 1px solid;
+  height: 35px;
+  margin-right: 10px;
+  margin-bottom: 0px;
+}
+
+.btn_i {
+  margin-right: 5px;
+  font-size: 15px;
+  color: #fff;
+}
+
+.btt_blue {
+  background: #2f5597;
+}
+
+.btt_orange {
+  background: #fd7e14;
+}
+
+.btt_green {
+  background: #28a745;
+}
+
+.lenValue {
+  margin-left: 2px;
+}
+
+.btt_trich_xuat_sb_error:hover {
+  transform: translateY(-2px);
+}
+.btt_trich_xuat_sb_error:active{
+  transform: scale(0.95);
+}
+
+.btn_page {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  margin: 0 5px;
+}
+
+.prev, .next{
+  margin: 0 5px;
+}
+
+.goto {
+  margin: 0 15px;
+}
+
+.btn_page:active{
+  transform: scale(0.9);
+  color: red;
+}
+.pagination_box {
+  display: flex;
+  height: 35px;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  /* background-color: #19cece; */
+  
+}
+.pageNumberInput {
+  width: 100px;
+  text-align: center;
+  border: none;
+  background-color: white;
+  font-size: 20px;
+  padding: 3px;
+  border: none;
+  font-weight: bold;
+  color: black;
+}
+
+#loadingImage,#loadingImage1 {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  /* width: 60px; */
+  width: 10%;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+#loadingImage,#loadingImage1  {
+  animation: spin 2s linear infinite;
+}
