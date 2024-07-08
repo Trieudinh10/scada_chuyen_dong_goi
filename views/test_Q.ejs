@@ -22,6 +22,22 @@
         <div class="cnt_">
             <div class="block_">
                 <div class="item_">
+                    <%= __('Case No') %>:
+                </div>
+                <div class="item_">
+                    <input id="value_com_case" class="iofield_" disabled="disabled" type="text" />
+                    <script>
+                        fn_IOField("com_data_case","value_com_case");
+                    </script>
+                </div>
+                <div class="item_">
+                    <input id="value_data_case" class="iofield_" disabled="disabled" type="text" />
+                    <script>
+                        fn_IOField("DATA_CASE","value_data_case");
+                    </script>
+                </div>
+
+                <div class="item_">
                     <%= __('Part No') %>:
                 </div>
                 <div class="item_">
@@ -39,12 +55,7 @@
                         fn_IOField("DATA","value_data");
                     </script>
                 </div>
-                <div class="item_">
-                    <input id="value_data_1" class="iofield_" disabled="disabled" type="text" />
-                    <script>
-                        fn_IOField("DATA_1","value_data_1");
-                    </script>
-                </div>
+                
 
                 <div class="item_">
                     <img id="stt_"   alt="" class="cont_img">

@@ -5,6 +5,7 @@ module.exports = {
 };
 
 var tags_list = { 
+  // ------------------------------------------------------------DB1-------------------------- //
     DATA: 'DB1,BYTE0',
     DATA_1: 'DB1,BYTE1',
     DATA_2: 'DB1,BYTE2',
@@ -26,5 +27,9 @@ var tags_list = {
     DATA_18: 'DB1,BYTE18',
     DATA_19: 'DB1,BYTE19',
     Trig_Data: 'DB1,INT20',
-    test: 'DB1,X22.0'
+    test: 'DB1,X22.0',
+// ------------------------------------------------------------DB2-------------------------- //
+    DATA_CASE:'DB2,BYTE0',
+    DATA_CASE_1:'DB2,BYTE1',
+    DATA_CASE_2:'DB2,BYTE2'
 }
