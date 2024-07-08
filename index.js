@@ -165,14 +165,56 @@ setInterval(
 
 let com_data = [];
 
+// function fn_tag() {
+//   const data_keys = [
+//       "DATA", "DATA_1", "DATA_2", "DATA_3", "DATA_4", "DATA_5",
+//       "DATA_6", "DATA_7", "DATA_8", "DATA_9", "DATA_10",
+//       "DATA_11", "DATA_12", "DATA_13", "DATA_14", "DATA_15",
+//       "DATA_16", "DATA_17", "DATA_18", "DATA_19"
+//   ];
+  
+//   const other_keys = ["Trig_Data", "test"];
+  
+//   // Kiểm tra obj_tag_value trước khi truy cập
+//   if (!obj_tag_value) {
+//       console.log("obj_tag_value is undefined");
+//       return;
+//   }
+
+//   // Tạo com_data từ các biến DATA đến DATA_19 bằng cách ghép chúng lại thành một chuỗi
+//   com_data = data_keys.map(key => obj_tag_value[key] !== undefined ? obj_tag_value[key] : "").join('');
+  
+//   // In ra giá trị của com_data
+//   console.log("com_data", com_data);
+
+//   // Gửi com_data qua socket
+//   io.sockets.emit("com_data", com_data);
+
+//   // Gửi từng sự kiện qua socket cho các biến từ DATA đến DATA_19
+//   data_keys.forEach(event => {
+//       io.sockets.emit(event, obj_tag_value[event]);
+//   });
+
+//   // Gửi từng sự kiện qua socket cho các biến khác
+//   other_keys.forEach(event => {
+//       io.sockets.emit(event, obj_tag_value[event]);
+//   });
+//   obj_tag_value["com_data"] = com_data;
+//   io.sockets.emit("com_data", obj_tag_value["com_data"]);
+// }
 function fn_tag() {
+  /*Các biến này sẽ đổi sang kiểu kí tự: 
+  + Trước khi nối lại chuỗi
+  + Trước khi Insert vào database
+  + Trước khi gửi thông qua socket */
   const data_keys = [
     "DATA", "DATA_1", "DATA_2", "DATA_3", "DATA_4", "DATA_5",
     "DATA_6", "DATA_7", "DATA_8", "DATA_9", "DATA_10",
     "DATA_11", "DATA_12", "DATA_13", "DATA_14", "DATA_15",
     "DATA_16", "DATA_17", "DATA_18", "DATA_19"
   ];
-
+  
+  // Không biến đổi sang kiểu kí tự
   const other_keys = ["Trig_Data", "test"];
 
   // Kiểm tra obj_tag_value trước khi truy cập
@@ -181,29 +223,62 @@ function fn_tag() {
     return;
   }
 
-  // Tạo com_data từ các biến DATA đến DATA_19 bằng cách ghép chúng lại thành một chuỗi
-  com_data = data_keys.map(key => obj_tag_value[key] !== undefined ? obj_tag_value[key] : "").join('');
+  // Tạo một biến mới, chuyển đổi dữ liệu từ hệ cơ số 10 sang kiểu ký tự
+  let char_data_array = data_keys.map(key => {
+      if (obj_tag_value[key] !== undefined) {
+          let num = parseInt(obj_tag_value[key], 10); // Chuyển đổi sang số nguyên hệ cơ số 10
+          return String.fromCharCode(num); // Chuyển đổi số nguyên thành ký tự ASCII
+      }
+      return "";
+  });
+
+  // Nối các giá trị của mảng char_data_array thành chuỗi char_data
+  let char_data = char_data_array.join('');
+
+  // In ra giá trị của char_data_array
+  console.log("char_data_array", char_data_array);
+
+  // Tạo com_data từ các biến DATA đến DATA_19 bằng cách ghép chúng lại thành một chuỗi ký tự
+  let com_data = char_data; // com_data bây giờ là kết quả của việc nối các ký tự ASCII
 
   // In ra giá trị của com_data
   console.log("com_data", com_data);
 
-  // Gửi com_data qua socket
-  io.sockets.emit("com_data", com_data);
+  // Tạo mảng chứa các giá trị ký tự của từng sự kiện
+  let char_values_array = [];
 
   // Gửi từng sự kiện qua socket cho các biến từ DATA đến DATA_19
   data_keys.forEach(event => {
-    io.sockets.emit(event, obj_tag_value[event]);
+      let value = obj_tag_value[event];
+      if (value !== undefined) {
+          // Chuyển đổi và thêm giá trị kiểu ký tự vào mảng char_values_array
+          let char_value = String.fromCharCode(parseInt(value, 10));
+          char_values_array.push({ event: event, value: char_value });
+      }
   });
 
-  // Gửi từng sự kiện qua socket cho các biến khác
-  other_keys.forEach(event => {
-    io.sockets.emit(event, obj_tag_value[event]);
+  // Gửi từng sự kiện qua socket từ mảng char_values_array
+  char_values_array.forEach(item => {
+      // console.log(`Event: ${item.event}, Value: ${item.value}`);
+      io.sockets.emit(item.event, item.value);
   });
+
+  // Gửi từng sự kiện qua socket cho các biến khác mà không chuyển đổi
+  other_keys.forEach(event => {
+      let value = obj_tag_value[event];
+      if (value !== undefined) {
+          // console.log(`Event: ${event}, Value: ${value}`);
+          io.sockets.emit(event, value);
+      }
+  });
+
+  // Cập nhật obj_tag_value với com_data và char_data
   obj_tag_value["com_data"] = com_data;
+
+  // Gửi com_data và char_data qua socket
   io.sockets.emit("com_data", obj_tag_value["com_data"]);
 }
-
-
+  
 let old_com_data = "";
 let so_luong_box = 1;
 let oldTrigData = 0;
