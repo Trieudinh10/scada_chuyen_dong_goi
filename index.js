@@ -30,11 +30,11 @@ server.listen(PORT, () => {
 
 //LANGUAGE
 i18n.configure({
-  locales:['en', 'vi'],
+  locales: ['en', 'vi'],
   directory: __dirname + '/locales',
   cookie: 'lang',
- });
-app.use('/change-lang/:lang', (req, res) => { 
+});
+app.use('/change-lang/:lang', (req, res) => {
   res.cookie('lang', req.params.lang, { maxAge: 900000 });
   res.redirect('back');
 });
@@ -53,8 +53,8 @@ const connection = require('./config/database');
 ///////////////////////////////////////////////////////////////////////////////
 connection.connect(err => {
   if (err) {
-      console.error('Database connection failed:', err.stack);
-      return;
+    console.error('Database connection failed:', err.stack);
+    return;
   }
   console.log('Connected to database.');
 });
@@ -120,7 +120,7 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
 var nodes7 = require('nodes7');
 var conn_plc = new nodes7; // PLC1
 // Tạo địa chỉ kết nối (slot = 2 nếu là 300/400, slot = 1 nếu là 1200/1500)
-conn_plc.initiateConnection({port: 102, host: '10.14.85.26', rack: 0, slot: 1}, PLC_connected);
+conn_plc.initiateConnection({ port: 102, host: '10.14.85.26', rack: 0, slot: 1 }, PLC_connected);
 
 // Bảng tag trong Visual Studio Code
 const tag = require('./public/js/tag');
@@ -132,10 +132,10 @@ var taglodash = require('lodash'); // Chuyển variable sang array
 var tag_Listarr = taglodash.keys(tags_list);
 // GỬI DỮ LIỆu TAG CHO PLC
 function PLC_connected(err) {
-  if (typeof(err) !== "undefined") {
-      console.log(err); // Hiển thị lỗi nếu không kết nối được với PLC
+  if (typeof (err) !== "undefined") {
+    console.log(err); // Hiển thị lỗi nếu không kết nối được với PLC
   }
-  conn_plc.setTranslationCB(function(tag) { return tags_list[tag]; }); // Đưa giá trị đọc lên từ PLC và mảng
+  conn_plc.setTranslationCB(function (tag) { return tags_list[tag]; }); // Đưa giá trị đọc lên từ PLC và mảng
   conn_plc.addItems(tag_Listarr);
 }
 
@@ -167,23 +167,23 @@ let com_data = [];
 
 function fn_tag() {
   const data_keys = [
-      "DATA", "DATA_1", "DATA_2", "DATA_3", "DATA_4", "DATA_5",
-      "DATA_6", "DATA_7", "DATA_8", "DATA_9", "DATA_10",
-      "DATA_11", "DATA_12", "DATA_13", "DATA_14", "DATA_15",
-      "DATA_16", "DATA_17", "DATA_18", "DATA_19"
+    "DATA", "DATA_1", "DATA_2", "DATA_3", "DATA_4", "DATA_5",
+    "DATA_6", "DATA_7", "DATA_8", "DATA_9", "DATA_10",
+    "DATA_11", "DATA_12", "DATA_13", "DATA_14", "DATA_15",
+    "DATA_16", "DATA_17", "DATA_18", "DATA_19"
   ];
-  
+
   const other_keys = ["Trig_Data", "test"];
-  
+
   // Kiểm tra obj_tag_value trước khi truy cập
   if (!obj_tag_value) {
-      console.log("obj_tag_value is undefined");
-      return;
+    console.log("obj_tag_value is undefined");
+    return;
   }
 
   // Tạo com_data từ các biến DATA đến DATA_19 bằng cách ghép chúng lại thành một chuỗi
   com_data = data_keys.map(key => obj_tag_value[key] !== undefined ? obj_tag_value[key] : "").join('');
-  
+
   // In ra giá trị của com_data
   console.log("com_data", com_data);
 
@@ -192,12 +192,12 @@ function fn_tag() {
 
   // Gửi từng sự kiện qua socket cho các biến từ DATA đến DATA_19
   data_keys.forEach(event => {
-      io.sockets.emit(event, obj_tag_value[event]);
+    io.sockets.emit(event, obj_tag_value[event]);
   });
 
   // Gửi từng sự kiện qua socket cho các biến khác
   other_keys.forEach(event => {
-      io.sockets.emit(event, obj_tag_value[event]);
+    io.sockets.emit(event, obj_tag_value[event]);
   });
   obj_tag_value["com_data"] = com_data;
   io.sockets.emit("com_data", obj_tag_value["com_data"]);
@@ -222,35 +222,35 @@ function plc_tag() {
 
   // Chèn dữ liệu mới khi com_data thay đổi
   if (com_data !== old_com_data) {
-      var insertQuery = `INSERT INTO ${sqltable_Name} (date_time, so_luong_box, com_data) VALUES (${timeNow_toSQL}, '${so_luong_box}', '${com_data}');`;
-      connection.query(insertQuery, function(err, result) {
-          if (err) {
-              console.log('SQL Error:', err);
-          } else {
-              console.log('SQL Insert Result:', result);
-          }
-      });
-      old_com_data = com_data;
+    var insertQuery = `INSERT INTO ${sqltable_Name} (date_time, so_luong_box, com_data) VALUES (${timeNow_toSQL}, '${so_luong_box}', '${com_data}');`;
+    connection.query(insertQuery, function (err, result) {
+      if (err) {
+        console.log('SQL Error:', err);
+      } else {
+        console.log('SQL Insert Result:', result);
+      }
+    });
+    old_com_data = com_data;
   }
 
   // Kiểm tra và cập nhật so_luong_box nếu Trig_Data chuyển từ 0 sang 1
   if (obj_tag_value["Trig_Data"] === 1 && oldTrigData === 0) {
-      var updateQuery = `UPDATE ${sqltable_Name} SET so_luong_box = so_luong_box + 1 WHERE com_data = '${com_data}'`;
-      connection.query(updateQuery, function(err, result) {
-          if (err) {
-              console.log('SQL Error:', err);
-          } else {
-              console.log('SQL Update Result:', result);
-              // Cập nhật giá trị mới trong obj_tag_value sau khi cập nhật vào cơ sở dữ liệu
-              so_luong_box += 1;
-              obj_tag_value["so_luong_box"] = so_luong_box;
-              // Đặt lại giá trị Trig_Data về 0
-              obj_tag_value["Trig_Data"] = 0;
-              io.sockets.emit("Trig_Data", 0); // Gửi cập nhật qua socket nếu cần thiết
-              // Ghi dữ liệu xuống PLC
-              conn_plc.writeItems('Trig_Data', 0, valuesWritten);
-          }
-      });
+    var updateQuery = `UPDATE ${sqltable_Name} SET so_luong_box = so_luong_box + 1 WHERE com_data = '${com_data}'`;
+    connection.query(updateQuery, function (err, result) {
+      if (err) {
+        console.log('SQL Error:', err);
+      } else {
+        console.log('SQL Update Result:', result);
+        // Cập nhật giá trị mới trong obj_tag_value sau khi cập nhật vào cơ sở dữ liệu
+        so_luong_box += 1;
+        obj_tag_value["so_luong_box"] = so_luong_box;
+        // Đặt lại giá trị Trig_Data về 0
+        obj_tag_value["Trig_Data"] = 0;
+        io.sockets.emit("Trig_Data", 0); // Gửi cập nhật qua socket nếu cần thiết
+        // Ghi dữ liệu xuống PLC
+        conn_plc.writeItems('Trig_Data', 0, valuesWritten);
+      }
+    });
   }
 
   // Cập nhật oldTrigData để theo dõi trạng thái trước đó của Trig_Data
@@ -260,17 +260,17 @@ function plc_tag() {
 
 // HÀM GHI DỮ LIỆU XUỐNG PLC
 function valuesWritten(anythingBad) {
-  if (anythingBad) { 
-    console.log("SOMETHING WENT WRONG WRITING VALUES!!!!"); 
+  if (anythingBad) {
+    console.log("SOMETHING WENT WRONG WRITING VALUES!!!!");
   }
   console.log("Done writing.");
 }
 
 // Nhận các bức điện được gửi từ trình duyệt
-io.on("connection", function(socket){
+io.on("connection", function (socket) {
   // Bật tắt động cơ M1
-  socket.on("Client-send-cmdM1", function(data){
-      conn_plc.writeItems('test', data, valuesWritten);
+  socket.on("Client-send-cmdM1", function (data) {
+    conn_plc.writeItems('test', data, valuesWritten);
   });
 });
 
