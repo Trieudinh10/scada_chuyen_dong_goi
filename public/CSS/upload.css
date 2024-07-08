@@ -21,3 +21,9 @@ td {
     padding: 10px;
     text-align: left;
 }
+
+.upload_container{
+    margin: 16px; 
+    background-color: var(--light);
+    border-radius: 16px;
+}
