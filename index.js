@@ -75,7 +75,7 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
   // Validate data
   let isValid = true;
   data.forEach(row => {
-    if (!(row['Case No'] && row['C/B'] && row['SL box'])) {
+    if (!(row['Case No'] && row['C/B'] && row['SL Box'])) {
       isValid = false;
     }
   });
@@ -95,20 +95,19 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
       return;
     }
 
-// Insert new data
-data.forEach(row => {
-  const insertQuery = 'INSERT INTO import_excel (`colum1`, `C/B`, `SL box`) VALUES (?, ?, ?)';
-  const values = [row['Case No'], row['C/B'], row['SL box']];
-  connection.query(insertQuery, values, err => {
-    if (err) {
-      console.error('Error inserting data:', err.stack);
-      res.status(500).send('Error inserting data: ' + err.message);
-      return;
-    }
-  });
-});
-res.send('File uploaded and data updated successfully.');
-
+    // Insert new data
+    data.forEach(row => {
+      const insertQuery = 'INSERT INTO import_excel (`Case No`, `C/B`, `SL Box`) VALUES (?, ?, ?)';
+      const values = [row['Case No'], row['C/B'], row['SL Box']];
+      connection.query(insertQuery, values, err => {
+        if (err) {
+          console.error('Error inserting data:', err.stack);
+          res.status(500).send('Error inserting data: ' + err.message);
+          return;
+        }
+      });
+    });
+    res.send('File uploaded and data updated successfully.');
   });
 });
 
