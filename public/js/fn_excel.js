@@ -20,6 +20,8 @@ document.getElementById('plc_data').style.pointerEvents = 'auto'; // Cho phép c
 }
  
 
+const moment = require("moment-timezone"); // Import the moment-timezone library
+
 module.exports = {
     fn_excelExport_plc_data: function (Excel_name, Name_tittle, SQL_excel, Name_report, socket_emit, socket) {
         // =====================CÁC THUỘC TÍNH CHUNG=====================
@@ -85,7 +87,9 @@ module.exports = {
         // Dump all the data into Excel
         var rowIndex = 0;
         SQL_excel.forEach((e, index) => {
-
+            // Chuyển đổi thời gian sang múi giờ "Asia/Ho_Chi_Minh"
+            const localTime = moment(e.date_time).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD HH:mm:ss");
+            
             // row 1 is the header.
             rowIndex = index + rowpos;
             // worksheet1 collum
@@ -94,20 +98,18 @@ module.exports = {
                 { key: 'date_time', style: { numFmt: 'dd/mm/yyyy hh:mm:ss' }},
                 { key: 'com_data' },
                 { key: 'so_luong_box' }
-                
             ]
             worksheet.addRow({
-                STT: {
-                    formula: index + 1
-
-                },
-                ...e   // có 3 chấm e mới xuất ra đc
-            })
-        })
+                STT: index + 1,
+                date_time: localTime,
+                com_data: e.com_data,
+                so_luong_box: e.so_luong_box
+            });
+        });
         const totalNumberOfRows = worksheet.rowCount;
         // =====================STYLE CHO CÁC CỘT/HÀNG=====================
         // Style các cột nhãn
-        const HeaderStyle = ['A', 'B', 'C', 'D']
+        const HeaderStyle = ['A', 'B', 'C', 'D'];
         HeaderStyle.forEach((v) => {
             worksheet.getCell(`${v}${rowpos}`).style = { font: { bold: true }, alignment: { horizontal: 'center', vertical: 'middle', wrapText: true } };
             worksheet.getCell(`${v}${rowpos}`).border = {
@@ -115,12 +117,12 @@ module.exports = {
                 left: { style: 'thin' },
                 bottom: { style: 'thin' },
                 right: { style: 'thin' }
-            }
-        })
+            };
+        });
         // Cài đặt độ rộng cột
         worksheet.columns.forEach((column, index) => {
             column.width = 30;
-        })
+        });
         // Set width header
         worksheet.getColumn(1).width = 10;
         worksheet.getColumn(2).width = 20;
@@ -128,9 +130,9 @@ module.exports = {
         worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
             var datastartrow = rowpos;
             var rowindex = rowNumber + datastartrow;
-            const rowlength = datastartrow + SQL_excel.length
-            if (rowindex >= rowlength) { rowindex = rowlength }
-            const insideColumns = ['A', 'B', 'C', 'D']
+            const rowlength = datastartrow + SQL_excel.length;
+            if (rowindex >= rowlength) { rowindex = rowlength; }
+            const insideColumns = ['A', 'B', 'C', 'D'];
             // Tạo border
             insideColumns.forEach((v) => {
                 // Border
@@ -139,12 +141,12 @@ module.exports = {
                     bottom: { style: 'thin' },
                     left: { style: 'thin' },
                     right: { style: 'thin' }
-                },
-                    // Alignment
-                    worksheet.getCell(`${v}${rowindex}`).alignment = { horizontal: 'center', vertical: 'middle', wrapText: true }
-            })
-        })
-            // Align the "Nội dung cảnh báo" column content to the left
+                };
+                // Alignment
+                worksheet.getCell(`${v}${rowindex}`).alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+            });
+        });
+        // Align the "Nội dung cảnh báo" column content to the left
         // for (let i = rowpos + 1; i <= totalNumberOfRows; i++) {
         //     worksheet.getCell(`E${i}`).alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
         // }
@@ -175,5 +177,5 @@ module.exports = {
             socket.emit(socket_emit, Buffer);
         });
     },
+};
 
-}
