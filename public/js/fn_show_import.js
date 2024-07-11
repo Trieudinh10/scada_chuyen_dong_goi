@@ -4,7 +4,7 @@
  
 // Yêu cầu dữ liệu bảng
 var currentPage_ = 1;
-var itemsPerPage_ =  1000;
+var itemsPerPage_ =  100;
 var totalPages_ = 0;
 var data_full_ = [];
 
@@ -92,6 +92,7 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
 }
     // Chương trình con đọc dữ liệu SQL
     function fn_import_Show() {
+        
         currentPage_ = 1;
         socket.emit("msg_import_Show", "true");
         var loadingImage_ = document.getElementById('loadingImage_');
@@ -103,8 +104,7 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
             fn_table_master_single_(data); // Hiển thị dữ liệu bảng
             $("#pageNumberInput_").val(1);
             $("#totalPages_").text(1);
-            // document.getElementById('dtpk_Start_import').value = ""; // Gán giá trị mặc định
-            // document.getElementById('dtpk_End_import').value = ""; // Gán giá trị mặc định
+            //  document.getElementById('searchInput').value = ""; // Gán giá trị mặc định
             currentPage_ = 1;
             totalPages_ = 0;
             data_full_ = [];
@@ -114,30 +114,30 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
         });
     }
  
-//     // Gửi yêu cầu xuất Excel qua index.js
-//     function fn_import_By_Time() {
-//         var startValue = document.getElementById('dtpk_Start_import').value;
-//         var endValue = document.getElementById('dtpk_End_import').value;
-//         if (startValue && endValue) { // Kiểm tra nếu cả hai giá trị đều có
-//             var val = [startValue, endValue];
-//             socket.emit('msg_import_ByTime', val);
-//             var loadingImage_ = document.getElementById('loadingImage_');
-//             if (loadingImage_) {loadingImage_.style.display = 'block';}
-//             document.getElementById('import').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
-//         } else {
-//             alert("Vui lòng chọn khoảng thời gian");
-//         }
-//     }
+    // Gửi yêu cầu xuất Excel qua index.js
+    function fn_import_By_Time() {
+        var searchValue = document.getElementById('searchInput').value; // Lấy giá trị từ thẻ input
+        socket.emit('msg_import_ByTime', searchValue);
+        var loadingImage_ = document.getElementById('loadingImage_');
+        if (loadingImage_) {
+            loadingImage_.style.display = 'block';
+        }
+        document.getElementById('import').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
+    }
     
-// // lấy dữ liệu theo time từ phía server gửi qua
-// function fn_import_By_Time_display() {
-//     socket.on('import_ByTime', function (receivedData) {
-//         data_full_ = []; // Làm rỗng data_full_ trước khi nhận dữ liệu mới
-//         data_full_ = data_full_.concat(receivedData);
-//         fn_table_master_full_(data_full_, currentPage_, itemsPerPage_);
-//         updatePagination_();
-//         document.getElementById('loadingImage_').style.display = 'none';
-//         document.getElementById('import').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
-//     });
-// }
+    // Lấy dữ liệu từ phía server gửi qua
+    function fn_import_By_Time_display() {
+        socket.on('import_ByTime', function (receivedData) {
+            data_full_ = []; // Làm rỗng data_full_ trước khi nhận dữ liệu mới
+            data_full_ = data_full_.concat(receivedData);
+            fn_table_master_full_(data_full_, currentPage_, itemsPerPage_);
+            updatePagination_();
+            document.getElementById('loadingImage_').style.display = 'none';
+            document.getElementById('import').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
+        });
+    }
+    
+    // Đặt hàm fn_import_By_Time chạy mỗi 500ms
+setInterval(fn_import_By_Time, 500);
+    
  

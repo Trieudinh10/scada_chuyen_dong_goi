@@ -21,6 +21,8 @@ const func_main = require("./fn_main");
       );
     // Hàm tìm kiếm và xuất báo cáo
     func_main.fn_main_search_plc_data(socket, SQL_Excel_plc_data);
+
+    func_main.fn_main_search_import(socket);
   
   };
   

@@ -14,6 +14,7 @@
     <script src = "js/jquery-3.6.0.min.js"></script>
     <script src = "js/FileSaver.js"></script> 
      
+    
     <script>
         var socket = io()  
     </script>
@@ -157,9 +158,61 @@
             </div>
 
             <div id="import" class="block_">
-                <img id="loadingImage_" class="img_loading" src="/images/dev_Q/loading.png" />
-                <script> fn_import_Show();</script>
+                <!-- <img id="loadingImage_" class="img_loading1" src="/images/dev_Q/loading.png" /> -->
+                <!-- <script> fn_import_Show();</script> -->
                 <script> fn_import_Show_();</script>
+                <div class="thanh_trichxuat_sb_error">
+                    <div class="row_flex">  
+
+                        <!-- <input class="searchInput" type="text" id="searchInput" placeholder="Nhập giá trị tìm kiếm" />  -->
+                       
+                        <input class="searchInput_" disabled="disabled" type="text" id="searchInput"/>                     
+                        <script>
+                            fn_IOField("com_data_case","searchInput");
+                        </script>
+                         
+                        <button  class="btt_trich_xuat btt_blue" onclick="fn_import_By_Time();" title="<%= __('Search') %>"> 
+                            <i class="fa-solid fa-magnifying-glass btn_i" aria-hidden="true"></i>
+                            <!-- <p> <%= __('Search') %></p> -->
+                        </button>  
+                    </div>
+
+                    <div class="row_flex">
+                        <div id="pagination_box_" class="pagination_box">
+                            <button class="btn_page prev" id="prevPage_" onclick="funcprev_()">                               
+                                <i class='bx bx-chevron-left'></i>
+                            </button>
+                            <input id="pageNumberInput_" class="pageNumberInput" min="1" value="1">
+                            <button class="btn_page next" id="nextPage_" onclick="funcfor_()">                             
+                                <i class='bx bx-chevron-right' ></i>                          
+                            </button>
+                            <button class="btn_page goto" id="goToPage_" onclick="funcsearch_()">                               
+                                <i class='bx bx-chevrons-right' ></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row_flex">
+                        <div class="xoay">
+                            <img id="loadingImage_" class="img_loading1" src="/images/dev_Q/loading1.png" />
+                        </div>  
+
+                        <button class="btt_trich_xuat btt_orange" onclick="fn_import_Show();" title="<%= __('Refresh') %> ">
+                            <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>
+                            
+                        </button>
+                        <!-- <button class="btt_trich_xuat btt_green" onclick="fn_excel_plc_data();" title="<%= __('Export report') %>">
+                            <i class="fa-regular fa-file-excel btn_i" aria-hidden="true"></i>
+                             
+                        </button> -->
+                        
+                       
+                    </div>
+             
+                    <script>fn_import_By_Time_display();</script>
+                    <script>fn_excel_display_plc_data();</script>
+
+             </div>
                 <div id="div_table_import">
                     <table id="table_import">
                         <thead>

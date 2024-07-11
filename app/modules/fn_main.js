@@ -65,6 +65,26 @@ module.exports.fn_main_search_plc_data = function (socket, SQL_Excel_plc_data) {
   });
 };
 
+module.exports.fn_main_search_import = function (socket) {
+  socket.on("msg_import_ByTime", function (value_search) {
+      // Quy đổi thời gian ra định dạng của MySQL
+      var sqltable_Name = "import_excel"; // Tên bảng
+      var dt_col_Name = "Case_No"; // Tên cột tìm kiếm
+
+      var Query = "SELECT * FROM " + sqltable_Name + " WHERE " + dt_col_Name + " = ?;";
+      connection.query(Query, [value_search], function (err, results, fields) {
+        if (err) {
+          console.log(err);
+        } else {
+          const objectifyRawPacket = (row) => ({ ...row });
+          const convertedResponse = results.map(objectifyRawPacket);
+          socket.emit("import_ByTime", convertedResponse);
+        }
+      });
+  });
+}
+
+
 // Show sql lên màn hình
 module.exports.fn_main_show = function (
   socket,

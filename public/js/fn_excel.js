@@ -63,8 +63,8 @@ module.exports = {
             filename: 'public/images/logo_agri.png',
             extension: 'png',
         });
-        worksheet.addImage(imageId1, 'A1:B3');
-        worksheet.mergeCells('A1:B3');
+        worksheet.addImage(imageId1, 'A1:B2');
+        worksheet.mergeCells('A1:B2');
         // Thông tin công ty
         worksheet.getCell('C1').value = 'Công Ty TNHH Tập đoàn công nghiệp Trường Hải (THACO)';
         worksheet.getCell('C1').style = { font: { bold: true, size: 14 }, alignment: { vertical: 'middle' } };
@@ -124,7 +124,7 @@ module.exports = {
             column.width = 30;
         });
         // Set width header
-        worksheet.getColumn(1).width = 10;
+        worksheet.getColumn(1).width = 7;
         worksheet.getColumn(2).width = 20;
         // ++++++++++++Style cho các hàng dữ liệu++++++++++++
         worksheet.eachRow({ includeEmpty: true }, function (row, rowNumber) {
