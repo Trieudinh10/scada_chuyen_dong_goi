@@ -5,5 +5,10 @@
 	"Number of boxes": "Number of boxes",
 	"Package Code": "Package Code",
 	"Part No": "Part No",
-	"Case No": "Case No"
+	"Case No": "Case No",
+	"Select start time": "Select start time",
+	"Select end time": "Select end time",
+	"Search": "Search",
+	"Refresh": "Refresh",
+	"Export report": "Export report"
 }

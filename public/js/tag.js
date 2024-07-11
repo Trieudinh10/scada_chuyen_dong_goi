@@ -31,5 +31,22 @@ var tags_list = {
 // ------------------------------------------------------------DB2-------------------------- //
     DATA_CASE:'DB2,BYTE0',
     DATA_CASE_1:'DB2,BYTE1',
-    DATA_CASE_2:'DB2,BYTE2'
+    DATA_CASE_2:'DB2,BYTE2',
+    DATA_CASE_3: 'DB2,BYTE3',
+    DATA_CASE_4: 'DB2,BYTE4',
+    DATA_CASE_5: 'DB2,BYTE5',
+    DATA_CASE_6: 'DB2,BYTE6',
+    DATA_CASE_7: 'DB2,BYTE7',
+    DATA_CASE_8: 'DB2,BYTE8',
+    DATA_CASE_9: 'DB2,BYTE9',
+    DATA_CASE_10: 'DB2,BYTE10',
+    DATA_CASE_11: 'DB2,BYTE11',
+    DATA_CASE_12: 'DB2,BYTE12',
+    DATA_CASE_13: 'DB2,BYTE13',
+    DATA_CASE_14: 'DB2,BYTE14',
+    DATA_CASE_15: 'DB2,BYTE15',
+    DATA_CASE_16: 'DB2,BYTE16',
+    DATA_CASE_17: 'DB2,BYTE17',
+    DATA_CASE_18: 'DB2,BYTE18',
+    DATA_CASE_19: 'DB2,BYTE19',
 }

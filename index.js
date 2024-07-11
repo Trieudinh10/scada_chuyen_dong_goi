@@ -97,7 +97,7 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
 
     // Insert new data
     data.forEach(row => {
-      const insertQuery = 'INSERT INTO import_excel (`Case No`, `C/B`, `SL Box`) VALUES (?, ?, ?)';
+      const insertQuery = 'INSERT INTO import_excel (`Case_No`, `C_B`, `SL_Box`) VALUES (?, ?, ?)';
       const values = [row['Case No'], row['C/B'], row['SL Box']];
       connection.query(insertQuery, values, err => {
         if (err) {
@@ -175,7 +175,12 @@ function fn_tag() {
   ];
 
   // --------------TAG Case No ----------------- //
-  const data_case_keys = ["DATA_CASE", "DATA_CASE_1", "DATA_CASE_2"];
+  const data_case_keys = [
+    "DATA_CASE", "DATA_CASE_1", "DATA_CASE_2", "DATA_CASE_3", "DATA_CASE_4", "DATA_CASE_5",
+    "DATA_CASE_6", "DATA_CASE_7", "DATA_CASE_8", "DATA_CASE_9", "DATA_CASE_10",
+    "DATA_CASE_11", "DATA_CASE_12", "DATA_CASE_13", "DATA_CASE_14", "DATA_CASE_15",
+    "DATA_CASE_16", "DATA_CASE_17", "DATA_CASE_18", "DATA_CASE_19" 
+  ];
 
   // --------------TAG Triger ----------------- //
   const other_keys = ["Trig_Data", "test"];
@@ -185,16 +190,18 @@ function fn_tag() {
     return;
   }
 
-// --------------Chuyển sang kiểu Char ----------------- //
+  // --------------Chuyển sang kiểu Char ----------------- //
   const convertToCharArray = (keys) => {
     return keys.map(key => {
-      if (obj_tag_value[key] !== undefined) {
-        return String.fromCharCode(parseInt(obj_tag_value[key], 10));
+      const value = obj_tag_value[key];
+      if (value !== undefined && parseInt(value, 10) > 0) {
+        return String.fromCharCode(parseInt(value, 10));
       }
       return "";
     });
   };
-// --------------Gửi Socket emit từng phần tử của mảng ----------------- //
+
+  // --------------Gửi Socket emit từng phần tử của mảng ----------------- //
   const emitEvents = (keys, charArray) => {
     keys.forEach((key, index) => {
       const value = obj_tag_value[key];
@@ -215,7 +222,7 @@ function fn_tag() {
   obj_tag_value["com_data"] = com_data;
   io.sockets.emit("com_data", com_data);
 
-// --------------Fn Case No ----------------- //
+  // --------------Fn Case No ----------------- //
   const char_data_case_array = convertToCharArray(data_case_keys);
   const char_data_case = char_data_case_array.join('');
   console.log("Array Case No:", char_data_case_array);
@@ -225,7 +232,7 @@ function fn_tag() {
   obj_tag_value["com_data_case"] = com_data_case;
   io.sockets.emit("com_data_case", com_data_case);
 
-// --------------Fn Triger----------------- //
+  // --------------Fn Triger----------------- //
   other_keys.forEach(event => {
     const value = obj_tag_value[event];
     if (value !== undefined) {
@@ -234,6 +241,7 @@ function fn_tag() {
   });
 
 }
+
 
   
 let old_com_data = "";
@@ -306,4 +314,15 @@ io.on("connection", function (socket) {
   });
 });
 
+
+//------------------------------------------------- DEV_Q----------------------------------------- //
+const func_main_searchAndExports = require.main.require(
+  "./app/modules/fn_show_search_excel"
+);
+
+io.on("connection", (socket) => {
+  func_main_searchAndExports.func_show_search_excel(socket);
+});
+
+//------------------------------------------------- DEV_Q----------------------------------------- //
 

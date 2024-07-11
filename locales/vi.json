@@ -4,5 +4,10 @@
 	"Number of boxes": "Số lượng thùng",
 	"Code": "Code",
 	"Part No": "Mã thùng",
-	"Case No": "Mã kiện"
+	"Case No": "Mã kiện",
+	"Select start time": "Chọn thời gian bắt đầu",
+	"Select end time": "Chọn thời gian kết thúc",
+	"Search": "Tìm kiếm",
+	"Refresh": "Làm mới",
+	"Export report": "Xuất báo cáo"
 }

@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/css/test_Q.css">
     <title>TEST</title>
     <script src = "js/FC_Common.js"></script>
-    <script src = "js/fn_show.js"></script>
+    <script src = "js/fn_show_plc_data.js"></script>
+    <script src = "js/fn_show_import.js"></script>
+    <script src = "js/fn_excel.js"></script>
     <script src = "socket.io/socket.io.js"></script>
     <script src = "js/jquery-3.6.0.min.js"></script>
     <script src = "js/FileSaver.js"></script> 
@@ -15,6 +17,11 @@
     <script>
         var socket = io()  
     </script>
+      <!-- <script>
+        $(document).ready(function() {
+            $("#pagination_box").hide(); // Ẩn phần tử có id là "goToPage" khi trang được tải lần đầu
+        });
+    </script> -->
 </head>
 
 <body>
@@ -30,6 +37,7 @@
                         fn_IOField("com_data_case","value_com_case");
                     </script>
                 </div>
+                
                 <div class="item_">
                     <input id="value_data_case" class="iofield_" disabled="disabled" type="text" />
                     <script>
@@ -65,8 +73,69 @@
                 </div>
             </div>
             
-            <div class="block_">
-                <!-- <img id="loadingImage" class="img_loading" src="/images/dev_Q/loading.png" /> -->
+            <div id="plc_data" class="block_">
+                <img id="loadingImage" class="img_loading" src="/images/dev_Q/loading.png" />
+                
+                <script> fn_plc_data_Show();</script>
+                <script> fn_plc_data_Show_();</script>
+                
+                <div class="thanh_trichxuat_sb_error">
+                        <div class="row_flex">
+                            <div class="start_end_sb_error">
+                                <label  class="lable_sb_error">
+                                    <p><%= __('Select start time') %>:</p>
+                                </label>
+                                <input id="dtpk_Start_plc_data" class="dtpk_sb_error" type="datetime-local">
+                            </div>
+
+                            <div  class="start_end_sb_error">
+                                <label class="lable_sb_error">
+                                    <%= __('Select end time') %>:
+                                </label>
+                                <input id="dtpk_End_plc_data" class="dtpk_sb_error" type="datetime-local">
+                            </div>
+
+                            <button  class="btt_trich_xuat btt_blue" onclick="fn_plc_data_By_Time();" title="<%= __('Search') %>"> 
+                                <i class="fa-solid fa-magnifying-glass btn_i" aria-hidden="true"></i>
+                                <!-- <p> <%= __('Search') %></p> -->
+                            </button>  
+
+                        </div>
+
+                        <div class="row_flex">
+                            <div id="pagination_box" class="pagination_box">
+                                <button class="btn_page prev" id="prevPage" onclick="funcprev()">
+                                    <!-- <i class='bx bxs-chevron-left' ></i> -->
+                                    <i class='bx bx-chevron-left'></i>
+                                </button>
+                                <input id="pageNumberInput" class="pageNumberInput" min="1" value="1">
+                                <button class="btn_page next" id="nextPage" onclick="funcfor()">
+                                    <!-- <i class='bx bxs-chevron-right' ></i>  -->
+                                    <i class='bx bx-chevron-right' ></i>                          
+                                </button>
+                                <button class="btn_page goto" id="goToPage" onclick="funcsearch()">
+                                    <!-- <i class='bx bxs-chevrons-right'></i> -->
+                                    <i class='bx bx-chevrons-right' ></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="row_flex">
+                            <button class="btt_trich_xuat btt_orange" onclick="fn_plc_data_Show();" title="<%= __('Refresh') %> ">
+                                <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>
+                                
+                            </button>
+                            <button class="btt_trich_xuat btt_green" onclick="fn_excel_plc_data();" title="<%= __('Export report') %>">
+                                <i class="fa-regular fa-file-excel btn_i" aria-hidden="true"></i>
+                                 
+                            </button>
+                        </div>
+                 
+                        <script>fn_plc_data_By_Time_display();</script>
+                        <script>fn_excel_display_plc_data();</script>
+
+                 </div>
+
                 <div id="div_table_plc_data">
                     <table id="table_plc_data">
                         <thead>
@@ -75,18 +144,22 @@
                                     <%= __('Time') %>
                                 </th>
                                 <th >
-                                    <%= __('Number of boxes') %>
-                                </th>
-                                <th >
                                     <%= __('Part No') %>
                                 </th>
+                                <th >
+                                    <%= __('Number of boxes') %>
+                                </th>
+                                
                             </tr>
                         </thead>
                     </table>
                 </div>
             </div>
-            <div class="block_">
-                <!-- <img id="loadingImage1" class="img_loading" src="/images/dev_Q/loading.png" /> -->
+
+            <div id="import" class="block_">
+                <img id="loadingImage_" class="img_loading" src="/images/dev_Q/loading.png" />
+                <script> fn_import_Show();</script>
+                <script> fn_import_Show_();</script>
                 <div id="div_table_import">
                     <table id="table_import">
                         <thead>
