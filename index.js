@@ -82,7 +82,7 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
   // Validate data
   let isValid = true;
   data.forEach(row => {
-    if (!(row['Case No'] && row['C/B'] && row['SL Box'])) {
+    if (!(row['Case No'] && row['C/B'] && row['SL Box']&& row['SL Real'])) {
       isValid = false;
     }
   });
@@ -104,8 +104,8 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
 
     // Insert new data
     data.forEach(row => {
-      const insertQuery = 'INSERT INTO import_excel (`Case_No`, `C_B`, `SL_Box`) VALUES (?, ?, ?)';
-      const values = [row['Case No'], row['C/B'], row['SL Box']];
+      const insertQuery = 'INSERT INTO import_excel (`Case_No`, `C_B`, `SL_Box`,`SL_real`) VALUES (?, ?, ?,?)';
+      const values = [row['Case No'], row['C/B'], row['SL Box'],row['SL Real']];
       connection.query(insertQuery, values, err => {
         if (err) {
           console.error('Error inserting data:', err.stack);
@@ -323,12 +323,12 @@ io.on("connection", function (socket) {
 
 
 //------------------------------------------------- DEV_Q----------------------------------------- //
-const func_main_searchAndExports = require.main.require(
-  "./app/modules/fn_show_search_excel"
+const func_main_all_Q = require.main.require(
+  "./app/modules/fn_main_index"
 );
 
 io.on("connection", (socket) => {
-  func_main_searchAndExports.func_show_search_excel(socket);
+  func_main_all_Q.func_main_index(socket);
 });
 
 //------------------------------------------------- DEV_Q----------------------------------------- //

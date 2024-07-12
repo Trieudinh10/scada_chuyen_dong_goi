@@ -1,3 +1,6 @@
+
+<!-- ---------------------------------------SELECT OPTION -------------------------->
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,13 +11,13 @@
     <title>TEST</title>
     <script src = "js/FC_Common.js"></script>
     <script src = "js/fn_show_plc_data.js"></script>
-    <script src = "js/fn_show_import.js"></script>
+    <script src = "js/fn_show_import1.js"></script>
     <script src = "js/fn_excel.js"></script>
-    <script src = "js/fn_compare.js"></script>
     <script src = "socket.io/socket.io.js"></script>
     <script src = "js/jquery-3.6.0.min.js"></script>
     <script src = "js/FileSaver.js"></script> 
      
+    
     <script>
         var socket = io()  
     </script>
@@ -32,7 +35,6 @@
                 <div class="item_">
                     <%= __('Case No') %>:
                 </div>
-
                 <div class="item_">
                     <input id="value_com_case" class="iofield_" disabled="disabled" type="text" />
                     <script>
@@ -40,6 +42,13 @@
                     </script>
                 </div>
                 
+                <div class="item_">
+                    <input id="value_data_case" class="iofield_" disabled="disabled" type="text" />
+                    <script>
+                        fn_IOField("DATA_CASE","value_data_case");
+                    </script>
+                </div>
+
                 <div class="item_">
                     <%= __('Part No') %>:
                 </div>
@@ -50,25 +59,24 @@
                       
                     </script>
                 </div>
+                
 
                 <div class="item_">
-                    <%= __('Compare') %>:
-                </div>
-                <div class="item_">
-                    <input id="result"  class="iofield_" disabled="disabled" type="text" />
+                    <input id="value_data" class="iofield_" disabled="disabled" type="text" />
                     <script>
-                        fn_IOField("com_data_case","result");
+                        fn_IOField("DATA","value_data");
                     </script>
                 </div>
-                <!-- <div class="item_">
+                
+
+                <div class="item_">
                     <img id="stt_"   alt="" class="cont_img">
                     <script>
                         fn_SymbolStatus("Trig_Data","status","stt_");
                     </script>
-                </div> -->
+                </div>
             </div>
             
-            <!-- Table plc data -->
             <div id="plc_data" class="block_">
                 <img id="loadingImage" class="img_loading" src="/images/dev_Q/loading.png" />
                 
@@ -101,13 +109,16 @@
                         <div class="row_flex">
                             <div id="pagination_box" class="pagination_box">
                                 <button class="btn_page prev" id="prevPage" onclick="funcprev()">
+                                    <!-- <i class='bx bxs-chevron-left' ></i> -->
                                     <i class='bx bx-chevron-left'></i>
                                 </button>
                                 <input id="pageNumberInput" class="pageNumberInput" min="1" value="1">
                                 <button class="btn_page next" id="nextPage" onclick="funcfor()">
+                                    <!-- <i class='bx bxs-chevron-right' ></i>  -->
                                     <i class='bx bx-chevron-right' ></i>                          
                                 </button>
                                 <button class="btn_page goto" id="goToPage" onclick="funcsearch()">
+                                    <!-- <i class='bx bxs-chevrons-right'></i> -->
                                     <i class='bx bx-chevrons-right' ></i>
                                 </button>
                             </div>
@@ -116,9 +127,11 @@
                         <div class="row_flex">
                             <button class="btt_trich_xuat btt_orange" onclick="fn_plc_data_Show();" title="<%= __('Refresh') %> ">
                                 <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>
+                                
                             </button>
                             <button class="btt_trich_xuat btt_green" onclick="fn_excel_plc_data();" title="<%= __('Export report') %>">
                                 <i class="fa-regular fa-file-excel btn_i" aria-hidden="true"></i>
+                                 
                             </button>
                         </div>
                  
@@ -141,29 +154,28 @@
                                     <%= __('Number of boxes') %>
                                 </th>
                                 
+                                
                             </tr>
                         </thead>
                     </table>
                 </div>
             </div>
 
-            <!-- Table import -->
             <div id="import" class="block_">
-                
-                <!-- <script> fn_import_Show();</script> -->
+                <!-- <img id="loadingImage_" class="img_loading1" src="/images/dev_Q/loading.png" /> -->
+                <script> fn_import_Show();</script>
                 <script> fn_import_Show_();</script>
                 <div class="thanh_trichxuat_sb_error">
                     <div class="row_flex">  
+                        <!-- <input class="searchInput" type="text" id="searchInput" placeholder="Nhập giá trị tìm kiếm" />                         -->
+                        
+                        <!-- <button  class="btt_trich_xuat btt_blue" onclick="fn_import_By_Time();" title="<%= __('Search') %>"> 
+                            <i class="fa-solid fa-magnifying-glass btn_i" aria-hidden="true"></i>   
+                        </button>   -->
 
-                        <input class="searchInput_" disabled="disabled" type="text" id="searchInput"/>                     
-                        <script>
-                            fn_IOField("com_data_case","searchInput");
-                        </script>
-                         
-                        <button  class="btt_trich_xuat btt_blue" onclick="fn_import_By_Time();" title="<%= __('Search') %>"> 
-                            <i class="fa-solid fa-magnifying-glass btn_i" aria-hidden="true"></i>
-                            <!-- <p> <%= __('Search') %></p> -->
-                        </button>  
+                        <select id="caseNoSelector" class="searchInput" onchange="fn_import_By_Time();">
+                            <option value="">Chọn giá trị Case No</option>
+                        </select>
                     </div>
 
                     <div class="row_flex">
@@ -187,13 +199,17 @@
                         </div>  
 
                         <button class="btt_trich_xuat btt_orange" onclick="fn_import_Show();" title="<%= __('Refresh') %> ">
-                            <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>                            
-                        </button>
-                                        
+                            <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>
+                        </button>                                               
                     </div>
              
-                    <script>fn_import_By_Time_display();</script>
+                    
                     <script>fn_excel_display_plc_data();</script>
+
+                    <script>
+                        fn_import_By_Time_display();
+                        case_no();              
+                    </script>
 
              </div>
                 <div id="div_table_import">

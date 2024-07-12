@@ -50,7 +50,9 @@ function funcsearch() {
 function fn_table_master_single(data) {
     // $("#pagination_box").css("display", "none");  
     if (data) {
-        $("#table_plc_data tbody").empty();
+        // $("#table_plc_data tbody").empty();
+        $("#table_plc_data tbody").remove();
+
         var len = data.length;
         var txt = "<tbody>";
         var count = 0;
@@ -69,17 +71,17 @@ function fn_table_master_single(data) {
                     + "</td><td>" + data[i].so_luong_box
                     + "</td></tr>";
             }
-            if (txt != "") {
+          
                 txt += "</tbody>";
-                $("#table_plc_data").prepend(txt);
-            }
+                $("#table_plc_data").append(txt);
+             
         }
     }
 }
 function fn_table_master_full(data, currentPage, itemsPerPage) {
     if (data) {
         $("#pagination_box").css("display", "flex");
-        $("#table_plc_data tbody").empty();
+        $("#table_plc_data tbody").remove();
         var len = data.length;
         var startIdx = (currentPage - 1) * itemsPerPage;
         var endIdx = Math.min(startIdx + itemsPerPage, len);
@@ -98,11 +100,8 @@ function fn_table_master_full(data, currentPage, itemsPerPage) {
                     + "</td><td>" + data[i].so_luong_box
                     + "</td></tr>";
         }
-        if (txt != "") {
             txt += "</tbody>";
-            $("#table_plc_data").prepend(txt);
-            
-        }
+            $("#table_plc_data").append(txt);
     }
 
 }
@@ -156,4 +155,4 @@ function fn_plc_data_By_Time_display() {
         document.getElementById('plc_data').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
     });
 }
- 
+//  setInterval(fn_plc_data_Show,500)

@@ -1,11 +1,10 @@
 const path = require("path");
- 
 const connection = require("../../config/database");
 const plc_data_excel = require("../../public/js/fn_excel");
 const Excel_plc_data = require("exceljs");
  
-
 // /Hàm tìm kiếm ở bảng lỗi
+//------------------------Tìm kiếm kiểu date
 module.exports.fn_main_search_plc_data = function (socket, SQL_Excel_plc_data) {
   socket.on("msg_plc_data_ByTime", function (data) {
     // console.log('1');
@@ -65,6 +64,7 @@ module.exports.fn_main_search_plc_data = function (socket, SQL_Excel_plc_data) {
   });
 };
 
+//------------------------Tìm kiếm kiểu Real PLC
 module.exports.fn_main_search_import = function (socket) {
   socket.on("msg_import_ByTime", function (value_search) {
       // Quy đổi thời gian ra định dạng của MySQL
@@ -83,7 +83,67 @@ module.exports.fn_main_search_import = function (socket) {
       });
   });
 }
+//------------------------Tìm kiếm kiểu slector option
+module.exports.fn_main_search_import1 = function (socket) {
+  // Lấy các giá trị không lặp lại từ trường Case_No
+  socket.on("get_case_no_options", function () {
+    var sqltable_Name = "import_excel"; // Tên bảng
+    var dt_col_Name = "Case_No"; // Tên cột
 
+    var Query = "SELECT DISTINCT " + dt_col_Name + " FROM " + sqltable_Name + ";";
+    connection.query(Query, function (err, results, fields) {
+      if (err) {
+        console.log(err);
+      } else {
+        const caseNoOptions = results.map(row => row[dt_col_Name]);
+        socket.emit("case_no_options", caseNoOptions);
+      }
+    });
+  });
+
+  // Xử lý yêu cầu tìm kiếm theo giá trị Case_No
+  socket.on("msg_import_ByTime", function (value_search) {
+    var sqltable_Name = "import_excel"; // Tên bảng
+    var dt_col_Name = "Case_No"; // Tên cột tìm kiếm
+
+    var Query = "SELECT * FROM " + sqltable_Name + " WHERE " + dt_col_Name + " = ?;";
+    connection.query(Query, [value_search], function (err, results, fields) {
+      if (err) {
+        console.log(err);
+      } else {
+        const objectifyRawPacket = (row) => ({ ...row });
+        const convertedResponse = results.map(objectifyRawPacket);
+        socket.emit("import_ByTime", convertedResponse);
+      }
+    });
+  });
+}
+//------------------------So sánh
+// module.exports.fn_main_compare = function (){
+
+//   const query = 'SELECT SL_Box, SL_Real FROM import_excel WHERE C_B = "CC"';
+
+//   connection.query(query, (error, results, fields) => {
+//     if (error) throw error;
+
+//     results.forEach(row => {
+//       const slBox = parseInt(row.SL_Box, 10);
+//       const slReal = parseInt(row.SL_Real, 10);
+
+//       let resultText = '';
+//       if (slBox === slReal) {
+//         resultText = 'đủ';
+//       } else if (slBox > slReal) {
+//         resultText = 'dư';
+//       } else {
+//         resultText = 'thiếu';
+//       }
+
+//       // Assuming there's only one row, if not, you'd need to handle multiple rows properly
+//       console.log(`Kết quả so sánh: ${resultText}`);
+//     });
+//   });
+// }
 
 // Show sql lên màn hình
 module.exports.fn_main_show = function (
