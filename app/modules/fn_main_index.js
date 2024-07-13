@@ -31,6 +31,6 @@ module.exports.func_main_index = function (socket) {
   func_main.fn_main_search_import1(socket);
 
   //------------------------So sánh
-  // func_main.fn_main_compare();
+  func_main.fn_main_compare(socket);
   
 };

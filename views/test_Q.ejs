@@ -28,6 +28,7 @@
 <body>
     <%- include ('./partials/sidebar') %>
         <div class="cnt_">
+
             <div class="block_">
                 <div class="item_">
                     <%= __('Case No') %>:
@@ -47,7 +48,6 @@
                     <input id="value_com" class="iofield_" disabled="disabled" type="text" />
                     <script>
                         fn_IOField("com_data","value_com");
-                      
                     </script>
                 </div>
 
@@ -56,10 +56,9 @@
                 </div>
                 <div class="item_">
                     <input id="result"  class="iofield_" disabled="disabled" type="text" />
-                    <script>
-                        fn_IOField("com_data_case","result");
-                    </script>
                 </div>
+
+                 
                 <!-- <div class="item_">
                     <img id="stt_"   alt="" class="cont_img">
                     <script>
@@ -71,10 +70,6 @@
             <!-- Table plc data -->
             <div id="plc_data" class="block_">
                 <img id="loadingImage" class="img_loading" src="/images/dev_Q/loading.png" />
-                
-                <script> fn_plc_data_Show();</script>
-                <script> fn_plc_data_Show_();</script>
-                
                 <div class="thanh_trichxuat_sb_error">
                         <div class="row_flex">
                             <div class="start_end_sb_error">
@@ -120,11 +115,7 @@
                             <button class="btt_trich_xuat btt_green" onclick="fn_excel_plc_data();" title="<%= __('Export report') %>">
                                 <i class="fa-regular fa-file-excel btn_i" aria-hidden="true"></i>
                             </button>
-                        </div>
-                 
-                        <script>fn_plc_data_By_Time_display();</script>
-                        <script>fn_excel_display_plc_data();</script>
-
+                        </div>                                        
                  </div>
 
                 <div id="div_table_plc_data">
@@ -149,9 +140,6 @@
 
             <!-- Table import -->
             <div id="import" class="block_">
-                
-                <!-- <script> fn_import_Show();</script> -->
-                <script> fn_import_Show_();</script>
                 <div class="thanh_trichxuat_sb_error">
                     <div class="row_flex">  
 
@@ -192,8 +180,6 @@
                                         
                     </div>
              
-                    <script>fn_import_By_Time_display();</script>
-                    <script>fn_excel_display_plc_data();</script>
 
              </div>
                 <div id="div_table_import">
@@ -220,13 +206,20 @@
         </div>
 
 
+        <!-- <script> fn_compare();</script> -->
+        <script> fn_compare_();</script>
 
+        <script> fn_plc_data_Show();</script>
+        <script> fn_plc_data_Show_();</script>
 
+        <script>fn_plc_data_By_Time_display();</script>
+        <script>fn_excel_display_plc_data();</script>
 
+         <!-- <script> fn_import_Show();</script> -->
+         <script> fn_import_Show_();</script>
 
-
-
-
+        <script>fn_import_By_Time_display();</script>
+        
 
 </body>
 

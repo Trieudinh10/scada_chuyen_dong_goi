@@ -75,6 +75,16 @@
   font-size: 15px;
   color: black;
 }
+
+.change_green{
+  background-color: rgb(0, 255, 0)
+}
+.change_red{
+  background-color: red;
+}
+.change_yellow{
+  background-color: yellow;
+}
 /* --------------------------------table------------------------- */
 
 #div_table_plc_data,

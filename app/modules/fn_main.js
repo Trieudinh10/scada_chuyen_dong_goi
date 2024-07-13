@@ -119,31 +119,39 @@ module.exports.fn_main_search_import1 = function (socket) {
   });
 }
 //------------------------So sánh
-// module.exports.fn_main_compare = function (){
+module.exports.fn_main_compare = function (socket) {
+  socket.on("msg_compare", function (value_search) {
+    // Quy đổi thời gian ra định dạng của MySQL
+    var sqltable_Name = "import_excel"; // Tên bảng
+    var dt_col_Name = "C_B"; // Tên cột tìm kiếm
+    var dt_col_Name1 = "Case_No"; // Tên cột tìm kiếm
+    var fields = ["SL_Box", "SL_Real"]; // Các trường cần lấy
+    var Query = "SELECT ?? FROM " + sqltable_Name + " WHERE " + dt_col_Name + " = ?;";
+    
+    connection.query(Query, [fields, value_search], function (err, results, fields) {
+      if (err) {
+        console.log(err);
+      } else {
+        let compareResults = results.map(row => {
+          const slBox = parseInt(row.SL_Box, 10);
+          const slReal = parseInt(row.SL_Real, 10);
 
-//   const query = 'SELECT SL_Box, SL_Real FROM import_excel WHERE C_B = "CC"';
+          if (slBox === slReal) {
+            return 'Đủ';
+          } else if (slBox > slReal) {
+            return 'Thiếu';
+          } else {
+            return 'Dư';
+          }
+        });
 
-//   connection.query(query, (error, results, fields) => {
-//     if (error) throw error;
+        socket.emit("compare_response", compareResults);
+        console.log(`Kết quả so sánh: ${compareResults}`);
+      }
+    });
+  });
+}
 
-//     results.forEach(row => {
-//       const slBox = parseInt(row.SL_Box, 10);
-//       const slReal = parseInt(row.SL_Real, 10);
-
-//       let resultText = '';
-//       if (slBox === slReal) {
-//         resultText = 'đủ';
-//       } else if (slBox > slReal) {
-//         resultText = 'dư';
-//       } else {
-//         resultText = 'thiếu';
-//       }
-
-//       // Assuming there's only one row, if not, you'd need to handle multiple rows properly
-//       console.log(`Kết quả so sánh: ${resultText}`);
-//     });
-//   });
-// }
 
 // Show sql lên màn hình
 module.exports.fn_main_show = function (

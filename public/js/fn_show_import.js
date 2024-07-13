@@ -117,7 +117,8 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
  
     // Gửi yêu cầu xuất Excel qua index.js
     function fn_import_By_Time() {
-        var searchValue = document.getElementById('searchInput').value; // Lấy giá trị từ thẻ input
+        var searchValue = document.getElementById('value_com_case').value; // Lấy giá trị từ thẻ input
+        // console.log(searchValue);
         socket.emit('msg_import_ByTime', searchValue);
         var loadingImage_ = document.getElementById('loadingImage_');
         if (loadingImage_) {
