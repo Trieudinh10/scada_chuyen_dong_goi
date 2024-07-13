@@ -111,7 +111,7 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
     function fn_import_By_Time() {
         var caseNoSelector = document.getElementById('caseNoSelector');
         var searchValue = caseNoSelector.value; // Lấy giá trị từ selector
-        socket.emit('msg_import_ByTime', searchValue);
+        socket.emit('msg_import_ByTime_', searchValue);
         var loadingImage_ = document.getElementById('loadingImage_');
         if (loadingImage_) {
             loadingImage_.style.display = 'block';
@@ -121,7 +121,7 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
     
     // Lấy dữ liệu từ phía server gửi qua
     function fn_import_By_Time_display() {
-        socket.on('import_ByTime', function (receivedData) {
+        socket.on('import_ByTime_', function (receivedData) {
             data_full_ = []; // Làm rỗng data_full_ trước khi nhận dữ liệu mới
             data_full_ = data_full_.concat(receivedData);
             fn_table_master_full_(data_full_, currentPage_, itemsPerPage_);

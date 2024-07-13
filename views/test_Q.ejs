@@ -50,6 +50,19 @@
                         fn_IOField("com_data","value_com");
                     </script>
                 </div>
+               
+                <div class="item_">
+                    <%= __('Number of boxes') %>:
+                </div>
+                <div class="item_">
+                    <input id="number_box"  class="iofield_" disabled="disabled" type="text" />
+                </div>
+                <div class="item_">
+                    <%= __('Real') %>:
+                </div>
+                <div class="item_">
+                    <input id="number_box_real"  class="iofield_" disabled="disabled" type="text" />
+                </div>
 
                 <div class="item_">
                     <%= __('Compare') %>:
@@ -57,14 +70,7 @@
                 <div class="item_">
                     <input id="result"  class="iofield_" disabled="disabled" type="text" />
                 </div>
-
-                 
-                <!-- <div class="item_">
-                    <img id="stt_"   alt="" class="cont_img">
-                    <script>
-                        fn_SymbolStatus("Trig_Data","status","stt_");
-                    </script>
-                </div> -->
+            
             </div>
             
             <!-- Table plc data -->
@@ -148,10 +154,6 @@
                             fn_IOField("com_data_case","searchInput");
                         </script>
                          
-                        <button  class="btt_trich_xuat btt_blue" onclick="fn_import_By_Time();" title="<%= __('Search') %>"> 
-                            <i class="fa-solid fa-magnifying-glass btn_i" aria-hidden="true"></i>
-                            <!-- <p> <%= __('Search') %></p> -->
-                        </button>  
                     </div>
 
                     <div class="row_flex">
@@ -206,7 +208,7 @@
         </div>
 
 
-        <!-- <script> fn_compare();</script> -->
+       
         <script> fn_compare_();</script>
 
         <script> fn_plc_data_Show();</script>
@@ -219,7 +221,16 @@
          <script> fn_import_Show_();</script>
 
         <script>fn_import_By_Time_display();</script>
+
         
+        <script>
+            const locale = {
+              full: "<%= __('Full') %>",
+              shortage: "<%= __('Shortage') %>",
+              over: "<%= __('Over') %>",
+              loading: "<%= __('Loading') %>"
+            };
+          </script>
 
 </body>
 

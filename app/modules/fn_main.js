@@ -2,7 +2,7 @@ const path = require("path");
 const connection = require("../../config/database");
 const plc_data_excel = require("../../public/js/fn_excel");
 const Excel_plc_data = require("exceljs");
- 
+var io = require("../../index");
 // /Hàm tìm kiếm ở bảng lỗi
 //------------------------Tìm kiếm kiểu date
 module.exports.fn_main_search_plc_data = function (socket, SQL_Excel_plc_data) {
@@ -64,25 +64,6 @@ module.exports.fn_main_search_plc_data = function (socket, SQL_Excel_plc_data) {
   });
 };
 
-//------------------------Tìm kiếm kiểu Real PLC
-module.exports.fn_main_search_import = function (socket) {
-  socket.on("msg_import_ByTime", function (value_search) {
-      // Quy đổi thời gian ra định dạng của MySQL
-      var sqltable_Name = "import_excel"; // Tên bảng
-      var dt_col_Name = "Case_No"; // Tên cột tìm kiếm
-
-      var Query = "SELECT * FROM " + sqltable_Name + " WHERE " + dt_col_Name + " = ?;";
-      connection.query(Query, [value_search], function (err, results, fields) {
-        if (err) {
-          console.log(err);
-        } else {
-          const objectifyRawPacket = (row) => ({ ...row });
-          const convertedResponse = results.map(objectifyRawPacket);
-          socket.emit("import_ByTime", convertedResponse);
-        }
-      });
-  });
-}
 //------------------------Tìm kiếm kiểu slector option
 module.exports.fn_main_search_import1 = function (socket) {
   // Lấy các giá trị không lặp lại từ trường Case_No
@@ -102,7 +83,7 @@ module.exports.fn_main_search_import1 = function (socket) {
   });
 
   // Xử lý yêu cầu tìm kiếm theo giá trị Case_No
-  socket.on("msg_import_ByTime", function (value_search) {
+  socket.on("msg_import_ByTime_", function (value_search) {
     var sqltable_Name = "import_excel"; // Tên bảng
     var dt_col_Name = "Case_No"; // Tên cột tìm kiếm
 
@@ -113,46 +94,12 @@ module.exports.fn_main_search_import1 = function (socket) {
       } else {
         const objectifyRawPacket = (row) => ({ ...row });
         const convertedResponse = results.map(objectifyRawPacket);
-        socket.emit("import_ByTime", convertedResponse);
+        socket.emit("import_ByTime_", convertedResponse);
       }
     });
   });
 }
-//------------------------So sánh
-module.exports.fn_main_compare = function (socket) {
-  socket.on("msg_compare", function (value_search) {
-    // Quy đổi thời gian ra định dạng của MySQL
-    var sqltable_Name = "import_excel"; // Tên bảng
-    var dt_col_Name = "C_B"; // Tên cột tìm kiếm
-    var dt_col_Name1 = "Case_No"; // Tên cột tìm kiếm
-    var fields = ["SL_Box", "SL_Real"]; // Các trường cần lấy
-    var Query = "SELECT ?? FROM " + sqltable_Name + " WHERE " + dt_col_Name + " = ?;";
-    
-    connection.query(Query, [fields, value_search], function (err, results, fields) {
-      if (err) {
-        console.log(err);
-      } else {
-        let compareResults = results.map(row => {
-          const slBox = parseInt(row.SL_Box, 10);
-          const slReal = parseInt(row.SL_Real, 10);
-
-          if (slBox === slReal) {
-            return 'Đủ';
-          } else if (slBox > slReal) {
-            return 'Thiếu';
-          } else {
-            return 'Dư';
-          }
-        });
-
-        socket.emit("compare_response", compareResults);
-        console.log(`Kết quả so sánh: ${compareResults}`);
-      }
-    });
-  });
-}
-
-
+ 
 // Show sql lên màn hình
 module.exports.fn_main_show = function (
   socket,

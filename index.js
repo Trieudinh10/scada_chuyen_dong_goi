@@ -5,9 +5,12 @@ const i18n = require("i18n");
 const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/authRouter');
 const indexRouter = require('./routes/indexRouter');
-
 const app = express();
-
+//------------------------------------------------- DEV_Q----------------------------------------- //
+const func_main_all_Q = require.main.require(
+  "./app/modules/fn_main_index"
+);
+//------------------------------------------------- DEV_Q----------------------------------------- //
 //.ENV
 dotenv.config();
 
@@ -28,7 +31,7 @@ app.use((req, res, next) => {
 
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
-
+module.exports = io;
 //CONECT SERVER
 const PORT = process.env.PORT;
 server.listen(PORT, () => {
@@ -136,6 +139,7 @@ const tags_list = tag.tags_list();
 // GỬI DỮ LIỆu TAG CHO PLC
 // Tag Name load
 var taglodash = require('lodash'); // Chuyển variable sang array
+const { Socket } = require('socket.io');
 var tag_Listarr = taglodash.keys(tags_list);
 // GỬI DỮ LIỆu TAG CHO PLC
 function PLC_connected(err) {
@@ -162,6 +166,11 @@ function fn_read_data_scan() {
   conn_plc.readAllItems(valuesReady);
   fn_tag();
   plc_tag();
+  //------------------------------------------------- DEV_Q----------------------------------------- //
+  func_main_all_Q.fn_main_search_import(io,obj_tag_value);
+  func_main_all_Q.fn_main_compare(io,obj_tag_value);
+  //------------------------------------------------- DEV_Q----------------------------------------- //
+ 
 }
 
 // Time cập nhật mỗi 1s
@@ -250,7 +259,6 @@ function fn_tag() {
 }
 
 
-  
 let old_com_data = "";
 let so_luong_box = 1;
 let oldTrigData = 0;
@@ -319,17 +327,13 @@ io.on("connection", function (socket) {
   socket.on("Client-send-cmdM1", function (data) {
     conn_plc.writeItems('test', data, valuesWritten);
   });
-});
-
 
 //------------------------------------------------- DEV_Q----------------------------------------- //
-const func_main_all_Q = require.main.require(
-  "./app/modules/fn_main_index"
-);
-
-io.on("connection", (socket) => {
   func_main_all_Q.func_main_index(socket);
+//------------------------------------------------- DEV_Q----------------------------------------- //
+
 });
 
-//------------------------------------------------- DEV_Q----------------------------------------- //
+
+
 

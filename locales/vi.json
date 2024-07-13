@@ -11,5 +11,9 @@
 	"Refresh": "Làm mới",
 	"Export report": "Xuất báo cáo",
 	"Real": "Thực tế",
-	"Compare": "So sánh"
+	"Compare": "So sánh",
+	"Full": "Đủ",
+	"Shortage": "Thiếu",
+	"Over": "Dư",
+	"Loading": "Loading"
 }
