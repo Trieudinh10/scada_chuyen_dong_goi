@@ -1,10 +1,9 @@
 // --------------------------------------------------------------------DEV Q ---------------------------------------------------------------//
-
-//------------------------------------------Tìm kiếm và phân trang bảng lỗi--------------------------------//
+// <!-- ---------------------------------------SELECT OPTION -------------------------->
  
 // Yêu cầu dữ liệu bảng
 var currentPage_ = 1;
-var itemsPerPage_ =  100;
+var itemsPerPage_ = 100;
 var totalPages_ = 0;
 var data_full_ = [];
 
@@ -49,8 +48,7 @@ function fn_table_master_single_(data) {
     $("#pagination_box_").css("display", "none"); // Ẩn phần tử có id là "goToPage"
     
     if (data) {
-
-        $("#table_import tbody").empty();
+        $("#table_import tbody").remove();
         var len = data.length;
         var txt = "<tbody>";
         if (len > 0) {
@@ -61,15 +59,11 @@ function fn_table_master_single_(data) {
                     + "</td><td>" + data[i].SL_Real
                     + "</td></tr>";
             }
-            if (txt != "") {
-                txt += "</tbody>";
-                $("#table_import").prepend(txt);
-            }
+            txt += "</tbody>";
+            $("#table_import").append(txt);
         }
     }
 }
-
-//Remove để xoá bớt body khi upload liên tục
 function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
     if (data) {
         $("#pagination_box_").css("display", "flex");
@@ -93,7 +87,6 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
 }
     // Chương trình con đọc dữ liệu SQL
     function fn_import_Show() {
-        
         currentPage_ = 1;
         socket.emit("msg_import_Show", "true");
         var loadingImage_ = document.getElementById('loadingImage_');
@@ -105,7 +98,7 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
             fn_table_master_single_(data); // Hiển thị dữ liệu bảng
             $("#pageNumberInput_").val(1);
             $("#totalPages_").text(1);
-            //  document.getElementById('searchInput').value = ""; // Gán giá trị mặc định
+             document.getElementById('caseNoSelector').value = ""; // Gán giá trị mặc định
             currentPage_ = 1;
             totalPages_ = 0;
             data_full_ = [];
@@ -115,21 +108,20 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
         });
     }
  
-    // Gửi yêu cầu xuất Excel qua index.js
-    // function fn_import_By_Time() {
-    //     var searchValue = document.getElementById('value_com_case').value; // Lấy giá trị từ thẻ input
-    //     // console.log(searchValue);
-    //     socket.emit('msg_import_ByTime', searchValue);
-    //     var loadingImage_ = document.getElementById('loadingImage_');
-    //     if (loadingImage_) {
-    //         loadingImage_.style.display = 'block';
-    //     }
-    //     document.getElementById('import').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
-    // }
+    function fn_import_By_Time() {
+        var caseNoSelector = document.getElementById('caseNoSelector');
+        var searchValue = caseNoSelector.value; // Lấy giá trị từ selector
+        socket.emit('msg_import_ByTime_', searchValue);
+        var loadingImage_ = document.getElementById('loadingImage_');
+        if (loadingImage_) {
+            loadingImage_.style.display = 'block';
+        }
+        document.getElementById('import').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
+    }
     
     // Lấy dữ liệu từ phía server gửi qua
     function fn_import_By_Time_display() {
-        socket.on('import_ByTime', function (receivedData) {
+        socket.on('import_ByTime_', function (receivedData) {
             data_full_ = []; // Làm rỗng data_full_ trước khi nhận dữ liệu mới
             data_full_ = data_full_.concat(receivedData);
             fn_table_master_full_(data_full_, currentPage_, itemsPerPage_);
@@ -139,8 +131,21 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
         });
     }
     
-    // Đặt hàm fn_import_By_Time chạy mỗi 500ms
-// setInterval(fn_import_By_Time, 500);
- 
+
+    function case_no(){
+    // Yêu cầu server gửi danh sách các giá trị Case_No không lặp lại
+    socket.emit('get_case_no_options');
+        
+    // Nhận danh sách các giá trị Case_No từ server và cập nhật selector
+    socket.on('case_no_options', function(caseNoOptions) {
+        var caseNoSelector = document.getElementById('caseNoSelector');
+        caseNoOptions.forEach(function(optionValue) {
+            var option = document.createElement('option');
+            option.value = optionValue;
+            option.text = optionValue;
+            caseNoSelector.add(option);
+        });
+ });
+    }
+   
     
- 
