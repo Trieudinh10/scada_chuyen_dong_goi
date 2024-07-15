@@ -5,9 +5,12 @@ const i18n = require("i18n");
 const cookieParser = require('cookie-parser');
 const authRouter = require('./routes/authRouter');
 const indexRouter = require('./routes/indexRouter');
-
 const app = express();
-
+//------------------------------------------------- DEV_Q----------------------------------------- //
+const func_main_all_Q = require.main.require(
+  "./app/modules/fn_main_index"
+);
+//------------------------------------------------- DEV_Q----------------------------------------- //
 //.ENV
 dotenv.config();
 
@@ -19,9 +22,16 @@ app.set("views", "./views");
 app.set('views', path.resolve(__dirname, 'views'));
 app.use(i18n.init);
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Method", "GET,PUT,POST,DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
+
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
-
+module.exports = io;
 //CONECT SERVER
 const PORT = process.env.PORT;
 server.listen(PORT, () => {
@@ -75,7 +85,7 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
   // Validate data
   let isValid = true;
   data.forEach(row => {
-    if (!(row['Case No'] && row['C/B'] && row['SL Box'])) {
+    if (!(row['Case No'] && row['C/B'] && row['SL Box']&& row['SL Real'])) {
       isValid = false;
     }
   });
@@ -97,8 +107,8 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
 
     // Insert new data
     data.forEach(row => {
-      const insertQuery = 'INSERT INTO import_excel (`Case_No`, `C_B`, `SL_Box`) VALUES (?, ?, ?)';
-      const values = [row['Case No'], row['C/B'], row['SL Box']];
+      const insertQuery = 'INSERT INTO import_excel (`Case_No`, `C_B`, `SL_Box`,`SL_real`) VALUES (?, ?, ?,?)';
+      const values = [row['Case No'], row['C/B'], row['SL Box'],row['SL Real']];
       connection.query(insertQuery, values, err => {
         if (err) {
           console.error('Error inserting data:', err.stack);
@@ -129,6 +139,7 @@ const tags_list = tag.tags_list();
 // GỬI DỮ LIỆu TAG CHO PLC
 // Tag Name load
 var taglodash = require('lodash'); // Chuyển variable sang array
+const { Socket } = require('socket.io');
 var tag_Listarr = taglodash.keys(tags_list);
 // GỬI DỮ LIỆu TAG CHO PLC
 function PLC_connected(err) {
@@ -155,6 +166,11 @@ function fn_read_data_scan() {
   conn_plc.readAllItems(valuesReady);
   fn_tag();
   plc_tag();
+  //------------------------------------------------- DEV_Q----------------------------------------- //
+  func_main_all_Q.fn_main_search_import(io,obj_tag_value);
+  func_main_all_Q.fn_main_compare(io,obj_tag_value);
+  //------------------------------------------------- DEV_Q----------------------------------------- //
+ 
 }
 
 // Time cập nhật mỗi 1s
@@ -243,7 +259,6 @@ function fn_tag() {
 }
 
 
-  
 let old_com_data = "";
 let so_luong_box = 1;
 let oldTrigData = 0;
@@ -312,17 +327,13 @@ io.on("connection", function (socket) {
   socket.on("Client-send-cmdM1", function (data) {
     conn_plc.writeItems('test', data, valuesWritten);
   });
+
+//------------------------------------------------- DEV_Q----------------------------------------- //
+  func_main_all_Q.func_main_index(socket);
+//------------------------------------------------- DEV_Q----------------------------------------- //
+
 });
 
 
-//------------------------------------------------- DEV_Q----------------------------------------- //
-const func_main_searchAndExports = require.main.require(
-  "./app/modules/fn_show_search_excel"
-);
 
-io.on("connection", (socket) => {
-  func_main_searchAndExports.func_show_search_excel(socket);
-});
-
-//------------------------------------------------- DEV_Q----------------------------------------- //
 

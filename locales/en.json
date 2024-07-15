@@ -10,5 +10,16 @@
 	"Select end time": "Select end time",
 	"Search": "Search",
 	"Refresh": "Refresh",
-	"Export report": "Export report"
+	"Export report": "Export report",
+	"Real": "Real",
+	"Compare": "Compare",
+	"Full": "Full",
+	"Shortage": "Shortage",
+	"Over": "Over",
+	"Loading": "Loading",
+	"Upload": "Upload",
+	"Monitor": "Monitor",
+	"Data": "Data",
+	"User": "User",
+	"Home": "Home"
 }
