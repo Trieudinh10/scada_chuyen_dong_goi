@@ -46,24 +46,35 @@ function funcsearch_() {
 
 function fn_table_master_single_(data) {
     $("#pagination_box_").css("display", "none"); // Ẩn phần tử có id là "goToPage"
-    
     if (data) {
         $("#table_import tbody").remove();
         var len = data.length;
         var txt = "<tbody>";
         if (len > 0) {
             for (var i = 0; i < len; i++) {
-                txt += "<tr><td>" + data[i].Case_No
-                    + "</td><td>" + data[i].C_B
-                    + "</td><td>" + data[i].SL_Box
-                    + "</td><td>" + data[i].SL_Real
-                    + "</td></tr>";
+                var resultClass = "";
+            if (data[i].result === 'Đủ') {
+                resultClass = "green_background";
+            } else if (data[i].result === 'Thiếu') {
+                resultClass = "red_background";
+            } else if (data[i].result === 'Dư') {
+                resultClass = "yellow_background";
             }
-            txt += "</tbody>";
-            $("#table_import").append(txt);
+            txt += "<tr><td>" + data[i].Case_No
+            + "</td><td>" + data[i].C_B
+            + "</td><td>" + data[i].SL_Box
+            + "</td><td>" + data[i].SL_Real
+            + "</td><td class='" + resultClass + "'>" + data[i].result
+            + "</td></tr>";
+            }
+           
+                txt += "</tbody>";
+                $("#table_import").append(txt);
+            
         }
     }
 }
+
 function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
     if (data) {
         $("#pagination_box_").css("display", "flex");
@@ -73,17 +84,24 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
         var endIdx = Math.min(startIdx + itemsPerPage_, len);
         var txt = "<tbody>";
         for (var i = startIdx; i < endIdx; i++) {
+            var resultClass = "";
+            if (data[i].result === 'Đủ') {
+                resultClass = "green_background";
+            } else if (data[i].result === 'Thiếu') {
+                resultClass = "red_background";
+            } else if (data[i].result === 'Dư') {
+                resultClass = "yellow_background";
+            }
             txt += "<tr><td>" + data[i].Case_No
             + "</td><td>" + data[i].C_B
             + "</td><td>" + data[i].SL_Box
             + "</td><td>" + data[i].SL_Real
+            + "</td><td class='" + resultClass + "'>" + data[i].result
             + "</td></tr>";
         }
-            txt += "</tbody>";
-            $("#table_import").append(txt);
-            
+        txt += "</tbody>";
+        $("#table_import").append(txt);
     }
-
 }
     // Chương trình con đọc dữ liệu SQL
     function fn_import_Show() {
@@ -135,7 +153,6 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
     function case_no(){
     // Yêu cầu server gửi danh sách các giá trị Case_No không lặp lại
     socket.emit('get_case_no_options');
-        
     // Nhận danh sách các giá trị Case_No từ server và cập nhật selector
     socket.on('case_no_options', function(caseNoOptions) {
         var caseNoSelector = document.getElementById('caseNoSelector');

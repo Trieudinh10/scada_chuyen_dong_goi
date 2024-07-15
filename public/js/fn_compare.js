@@ -2,6 +2,7 @@
 
 function fn_compare_() {
   socket.on('compare_response', function (data) {
+    // console.log(data);
     const resultElement = document.getElementById('result');
     const resultElement1 = document.getElementById('number_box');
     const resultElement2 = document.getElementById('number_box_real');
@@ -13,7 +14,7 @@ function fn_compare_() {
 
     if (data.length === 0) {
       // Handle empty data case
-      resultElement.classList.remove('change_green', 'change_red', 'change_yellow');
+      resultElement.classList.remove('green_background', 'red_background', 'yellow_background');
       resultElement.value = locale.loading;
       resultElement1.value = locale.loading;
       resultElement2.value = locale.loading;
@@ -22,17 +23,17 @@ function fn_compare_() {
 
     data.forEach(item => {
       // Clear previous color classes
-      resultElement.classList.remove('change_green', 'change_red', 'change_yellow');
+      resultElement.classList.remove('green_background', 'red_background', 'yellow_background');
 
       // Set the color and text based on comparison result
-      if (item.compareResult === 'full') {
-        resultElement.classList.add('change_green');
+      if (item.compareResult === 'Đủ') {
+        resultElement.classList.add('green_background');
         resultElement.value = locale.full;
-      } else if (item.compareResult === 'shortage') {
-        resultElement.classList.add('change_red');
+      } else if (item.compareResult === 'Thiếu') {
+        resultElement.classList.add('red_background');
         resultElement.value = locale.shortage;
-      } else if (item.compareResult === 'over') {
-        resultElement.classList.add('change_yellow');
+      } else if (item.compareResult === 'Dư') {
+        resultElement.classList.add('yellow_background');
         resultElement.value = locale.over;
       } else {
         resultElement.value = locale.loading;
