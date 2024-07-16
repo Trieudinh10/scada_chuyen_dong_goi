@@ -4,8 +4,8 @@
   /* height: 100%; */
   /* background-color: bisque; */
   display: flex;
-  /* align-items: center;
-    justify-content: center; */
+  /* align-items: center; */
+    justify-content: center;
 }
 .block_ {
   height: 70%;
@@ -17,6 +17,18 @@
   border: 1px solid black;
   margin-right: 5px;
   flex-direction: column;
+}
+.block_1 {
+  height: 70%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border: 1px solid black;
+  margin-right: 5px;
+  flex-direction: column;
+  width: 100%;
 }
 .block_:first-child {
   /* background-color: aquamarine; */
@@ -68,6 +80,7 @@
   border-radius: 5px;
   border: 1px solid black;
   text-align: center;
+  font-size: 15px;
 }
 .searchInput_ {
   height: 35px;
@@ -79,14 +92,25 @@
   color: black;
 }
 
-.change_green{
-  background-color: rgb(0, 255, 0)
+.green_background {
+  background-color: rgb(0, 255, 0) !important;
+  color: black;
 }
-.change_red{
-  background-color: red;
+
+.red_background {
+  background-color: red !important;
+  /* color: white; */
+  color: black;
 }
-.change_yellow{
-  background-color: yellow;
+
+.yellow_background {
+  background-color: yellow !important;
+  color: black;
+}
+
+.aqua_background {
+  background-color: aqua;
+  color: black;
 }
 /* --------------------------------table------------------------- */
 
@@ -110,7 +134,8 @@
 
 #table_plc_data tr:hover td,
 #table_import tr:hover td {
-  background-color: #19cece;
+  /* background-color: #19cece; */
+  background-color: #cccc;
 }
 #table_plc_data thead th,
 #table_import thead th {
@@ -124,7 +149,7 @@
   border: 1px solid black;
   padding: 5px 2px;
   font-size: 15px;
-  width: 25%;
+  width: 20%;
 }
 #table_plc_data td,
 #table_import td {

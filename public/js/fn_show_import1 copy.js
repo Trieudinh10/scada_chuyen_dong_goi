@@ -117,7 +117,6 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
             $("#pageNumberInput_").val(1);
             $("#totalPages_").text(1);
              document.getElementById('caseNoSelector').value = ""; // Gán giá trị mặc định
-             document.getElementById('resultSelector').value = ""; // Gán giá trị mặc định
             currentPage_ = 1;
             totalPages_ = 0;
             data_full_ = [];
@@ -129,19 +128,14 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
  
     function fn_import_By_Time() {
         var caseNoSelector = document.getElementById('caseNoSelector');
-        var resultSelector = document.getElementById('resultSelector');
-        var searchValueCaseNo = caseNoSelector.value; // Lấy giá trị từ selector Case No
-        var searchValueResult = resultSelector.value; // Lấy giá trị từ selector Result
-    
-        socket.emit('msg_import_ByTime_', { caseNo: searchValueCaseNo, result: searchValueResult });
-    
+        var searchValue = caseNoSelector.value; // Lấy giá trị từ selector
+        socket.emit('msg_import_ByTime_', searchValue);
         var loadingImage_ = document.getElementById('loadingImage_');
         if (loadingImage_) {
             loadingImage_.style.display = 'block';
         }
         document.getElementById('import').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
     }
-    
     
     // Lấy dữ liệu từ phía server gửi qua
     function fn_import_By_Time_display() {
@@ -156,7 +150,7 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
     }
     
 
-    function fn_case_no(){
+    function case_no(){
     // Yêu cầu server gửi danh sách các giá trị Case_No không lặp lại
     socket.emit('get_case_no_options');
     // Nhận danh sách các giá trị Case_No từ server và cập nhật selector
@@ -170,18 +164,5 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
          });
         });
     }
-    function fn_result_options(){
-        // Yêu cầu server gửi danh sách các giá trị result không lặp lại
-        socket.emit('get_result_options');
-        // Nhận danh sách các giá trị result từ server và cập nhật selector
-        socket.on('result_options', function(resultOptions) {
-          var resultSelector = document.getElementById('resultSelector');
-          resultOptions.forEach(function(optionValue) {
-            var option = document.createElement('option');
-            option.value = optionValue;
-            option.text = optionValue;
-            resultSelector.add(option);
-          });
-        });
-      }
+   
     

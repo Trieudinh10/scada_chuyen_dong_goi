@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/test_Q.css">
-    <title>TEST</title>
+    <title><%= __('Monitor') %></title>
     <script src = "js/FC_Common.js"></script>
     <script src = "js/fn_show_plc_data.js"></script>
     <script src = "js/fn_show_import.js"></script>
@@ -65,10 +65,10 @@
                 </div>
 
                 <div class="item_">
-                    <%= __('Compare') %>:
+                    <%= __('Result') %>:
                 </div>
                 <div class="item_">
-                    <input id="result"  class="iofield_" disabled="disabled" type="text" />
+                    <input id="result_"  class="iofield_" disabled="disabled" type="text" />
                 </div>
             
             </div>
@@ -149,10 +149,10 @@
                 <div class="thanh_trichxuat_sb_error">
                     <div class="row_flex">  
 
-                        <input class="searchInput_" disabled="disabled" type="text" id="searchInput"/>                     
+                        <!-- <input class="searchInput_" disabled="disabled" type="text" id="searchInput"/>                     
                         <script>
                             fn_IOField("com_data_case","searchInput");
-                        </script>
+                        </script> -->
                          
                     </div>
 
@@ -200,6 +200,9 @@
                                 <th >
                                     <%= __('Real') %>
                                 </th>
+                                <th >
+                                    <%= __('Result') %>
+                                </th>
                             </tr>
                         </thead>
                     </table>
@@ -222,7 +225,7 @@
 
         <script>fn_import_By_Time_display();</script>
 
-        
+       
         <script>
             const locale = {
               full: "<%= __('Full') %>",

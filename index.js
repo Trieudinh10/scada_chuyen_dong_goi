@@ -170,6 +170,7 @@ function fn_read_data_scan() {
   //------------------------------------------------- DEV_Q----------------------------------------- //
   func_main_all_Q.fn_main_search_import(io,obj_tag_value);
   func_main_all_Q.fn_main_compare(io,obj_tag_value);
+  func_main_all_Q.fn_main_update();
   //------------------------------------------------- DEV_Q----------------------------------------- //
  
 }
@@ -248,7 +249,7 @@ function fn_tag() {
   emitEvents(data_case_keys, char_data_case_array);
   obj_tag_value["com_data_case"] = com_data_case;
   io.sockets.emit("com_data_case", com_data_case);
-
+  io.sockets.emit("all_com_data", [com_data, com_data_case]);
   // --------------Fn Triger----------------- //
   other_keys.forEach(event => {
     const value = obj_tag_value[event];
