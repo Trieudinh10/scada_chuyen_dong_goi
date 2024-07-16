@@ -11,7 +11,7 @@
     <title><%= __('Data') %></title>
     <script src = "js/FC_Common.js"></script>
     <script src = "js/fn_show_plc_data.js"></script>
-    <script src = "js/fn_show_import1.js"></script>
+    <script src = "js/fn_show_import_selector.js"></script>
     <script src = "js/fn_excel_import.js"></script>
     <script src = "socket.io/socket.io.js"></script>
     <script src = "js/jquery-3.6.0.min.js"></script>
@@ -41,11 +41,11 @@
                     <div class="row_flex">  
                         
                         <select id="caseNoSelector" class="searchInput" onchange="fn_import_By_Time();">
-                            <option value="">Chọn giá trị Case No</option>
+                            <option value=""><%= __('Select Case No') %></option>
                         </select>
 
                         <select id="resultSelector" class="searchInput" onchange="fn_import_By_Time();">
-                            <option value="">Chọn giá trị kết quả</option>
+                            <option value=""><%= __('Select Result') %></option>
                         </select>
                     </div>
 
@@ -66,7 +66,7 @@
 
                     <div class="row_flex">
                         <div class="xoay">
-                            <img id="loadingImage_" class="img_loading1" src="/images/dev_Q/loading1.png" />
+                            <img id="loadingImage_" class="img_loading1" src="/images/dev_Q/loading.png" />
                         </div>  
 
                         <button class="btt_trich_xuat btt_orange" onclick="fn_import_Show();" title="<%= __('Refresh') %> ">

@@ -1,7 +1,7 @@
 /////////////////// Excel bảng import dùng lưu trữ dữ liệu//////////////
 function fn_excel_import() {
     socket.emit("msg_Excel_Report_import", true);
-    var loadingImage = document.getElementById('loadingImage');
+    var loadingImage = document.getElementById('loadingImage_');
 if (loadingImage) {loadingImage.style.display = 'block';}
 document.getElementById('import').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
 
@@ -13,14 +13,13 @@ function fn_excel_display_import() {
         link.href = window.URL.createObjectURL(blob);
         link.download = "Packing_list.xlsx";
         link.click();
-        document.getElementById('loadingImage').style.display = 'none';
-document.getElementById('import').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
+        document.getElementById('loadingImage_').style.display = 'none';
+        document.getElementById('import').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
+         
     })
     console.log('15');
 }
  
-
-// const moment = require("moment-timezone"); // Import the moment-timezone library
 
 module.exports = {
     fn_excelExport_import: function (Excel_name, Name_tittle, SQL_excel, Name_report, socket_emit, socket) {

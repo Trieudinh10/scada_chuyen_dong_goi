@@ -7,7 +7,7 @@
   /* align-items: center; */
     justify-content: center;
 }
-.block_ {
+.block_,.block_1 {
   height: 70%;
   display: flex;
   position: relative;
@@ -17,17 +17,9 @@
   border: 1px solid black;
   margin-right: 5px;
   flex-direction: column;
+  border-radius: 5px;
 }
 .block_1 {
-  height: 70%;
-  display: flex;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  padding: 5px;
-  border: 1px solid black;
-  margin-right: 5px;
-  flex-direction: column;
   width: 100%;
 }
 .block_:first-child {
