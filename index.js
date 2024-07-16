@@ -166,6 +166,7 @@ function fn_read_data_scan() {
   conn_plc.readAllItems(valuesReady);
   fn_tag();
   plc_tag();
+  updateSLBoxPLC();
   //------------------------------------------------- DEV_Q----------------------------------------- //
   func_main_all_Q.fn_main_search_import(io,obj_tag_value);
   func_main_all_Q.fn_main_compare(io,obj_tag_value);
@@ -337,4 +338,35 @@ io.on("connection", function (socket) {
 
 
 
+// Hàm tìm và cập nhật SL_Box_plc
+function updateSLBoxPLC() {
+  // Lấy dữ liệu từ bảng excel_import
+  const excelImportQuery = `SELECT com_data AS code, so_luong_box FROM plc_data`;
+  connection.query(excelImportQuery, (err, excelRows) => {
+    if (err) {
+      console.log('SQL Error:', err);
+      return;
+    }
 
+    // Duyệt qua từng dòng trong bảng excel_import
+    excelRows.forEach(excelRow => {
+      const excelCode = excelRow.code;
+      const excelSLBox = excelRow.so_luong_box;
+
+      // Cập nhật giá trị SL_Box_plc trong bảng plc_data nếu mã trùng khớp
+      const updatePLCDataQuery = `
+        UPDATE import_excel
+        SET SL_real = ${excelSLBox}
+        WHERE C_B = '${excelCode}'
+      `;
+
+      connection.query(updatePLCDataQuery, (err, result) => {
+        if (err) {
+          console.log('SQL Error:', err);
+        } else {
+          // console.log(`Updated SL_Box_plc for com_data '${excelCode}':`, result);
+        }
+      });
+    });
+  });
+}
