@@ -4,8 +4,8 @@
   /* height: 100%; */
   /* background-color: bisque; */
   display: flex;
-  /* align-items: center;
-    justify-content: center; */
+  /* align-items: center; */
+    justify-content: center;
 }
 .block_ {
   height: 70%;
@@ -17,6 +17,18 @@
   border: 1px solid black;
   margin-right: 5px;
   flex-direction: column;
+}
+.block_1 {
+  height: 70%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border: 1px solid black;
+  margin-right: 5px;
+  flex-direction: column;
+  width: 100%;
 }
 .block_:first-child {
   /* background-color: aquamarine; */
@@ -66,6 +78,7 @@
   border-radius: 5px;
   border: 1px solid black;
   text-align: center;
+  font-size: 15px;
 }
 .searchInput_ {
   height: 35px;

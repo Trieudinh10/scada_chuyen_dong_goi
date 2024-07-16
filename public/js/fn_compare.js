@@ -3,7 +3,7 @@
 function fn_compare_() {
   socket.on('compare_response', function (data) {
     // console.log(data);
-    const resultElement = document.getElementById('result');
+    const resultElement = document.getElementById('result_');
     const resultElement1 = document.getElementById('number_box');
     const resultElement2 = document.getElementById('number_box_real');
 

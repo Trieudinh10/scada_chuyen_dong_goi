@@ -169,7 +169,7 @@ function fn_read_data_scan() {
   //------------------------------------------------- DEV_Q----------------------------------------- //
   func_main_all_Q.fn_main_search_import(io,obj_tag_value);
   func_main_all_Q.fn_main_compare(io,obj_tag_value);
-  func_main_all_Q.update();
+  func_main_all_Q.fn_main_update();
   //------------------------------------------------- DEV_Q----------------------------------------- //
  
 }
