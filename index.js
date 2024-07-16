@@ -85,7 +85,7 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
   // Validate data
   let isValid = true;
   data.forEach(row => {
-    if (!(row['Case No'] && row['C/B'] && row['SL Box']&& row['SL Real'])) {
+    if (!(row['Case No'] && row['C/B'] && row['SL Box'])) {
       isValid = false;
     }
   });
@@ -107,8 +107,8 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
 
     // Insert new data
     data.forEach(row => {
-      const insertQuery = 'INSERT INTO import_excel (`Case_No`, `C_B`, `SL_Box`,`SL_real`) VALUES (?, ?, ?,?)';
-      const values = [row['Case No'], row['C/B'], row['SL Box'],row['SL Real']];
+      const insertQuery = 'INSERT INTO import_excel (`Case_No`, `C_B`, `SL_Box`) VALUES (?, ?, ?)';
+      const values = [row['Case No'], row['C/B'], row['SL Box']];
       connection.query(insertQuery, values, err => {
         if (err) {
           console.error('Error inserting data:', err.stack);
