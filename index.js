@@ -339,7 +339,7 @@ io.on("connection", function (socket) {
 
 // Hàm tìm và cập nhật SL_Box_plc
 function updateSLBoxPLC() {
-  // Lấy dữ liệu từ bảng excel_import
+  // Lấy dữ liệu từ bảng plc_data
   const excelImportQuery = `SELECT com_data AS code, so_luong_box FROM plc_data`;
   connection.query(excelImportQuery, (err, excelRows) => {
     if (err) {
@@ -347,12 +347,12 @@ function updateSLBoxPLC() {
       return;
     }
 
-    // Duyệt qua từng dòng trong bảng excel_import
+    // Duyệt qua từng dòng trong bảng plc_data
     excelRows.forEach(excelRow => {
       const excelCode = excelRow.code;
       const excelSLBox = excelRow.so_luong_box;
 
-      // Cập nhật giá trị SL_Box_plc trong bảng plc_data nếu mã trùng khớp
+      // Cập nhật giá trị SL_real trong bảng import_excel nếu mã trùng khớp
       const updatePLCDataQuery = `
         UPDATE import_excel
         SET SL_real = ${excelSLBox}
