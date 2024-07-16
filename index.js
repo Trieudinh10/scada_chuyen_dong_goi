@@ -85,7 +85,7 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
   // Validate data
   let isValid = true;
   data.forEach(row => {
-    if (!(row['Case No'] && row['C/B'] && row['SL Box']&& row['SL Real'])) {
+    if (!(row['Case No'] && row['C/B'] && row['SL Box'])) {
       isValid = false;
     }
   });
@@ -107,8 +107,8 @@ app.post('/upload', upload.single('excelFile'), (req, res) => {
 
     // Insert new data
     data.forEach(row => {
-      const insertQuery = 'INSERT INTO import_excel (`Case_No`, `C_B`, `SL_Box`,`SL_real`) VALUES (?, ?, ?,?)';
-      const values = [row['Case No'], row['C/B'], row['SL Box'],row['SL Real']];
+      const insertQuery = 'INSERT INTO import_excel (`Case_No`, `C_B`, `SL_Box`) VALUES (?, ?, ?)';
+      const values = [row['Case No'], row['C/B'], row['SL Box']];
       connection.query(insertQuery, values, err => {
         if (err) {
           console.error('Error inserting data:', err.stack);
@@ -166,6 +166,7 @@ function fn_read_data_scan() {
   conn_plc.readAllItems(valuesReady);
   fn_tag();
   plc_tag();
+  updateSLBoxPLC();
   //------------------------------------------------- DEV_Q----------------------------------------- //
   func_main_all_Q.fn_main_search_import(io,obj_tag_value);
   func_main_all_Q.fn_main_compare(io,obj_tag_value);
@@ -336,4 +337,35 @@ io.on("connection", function (socket) {
 
 
 
+// Hàm tìm và cập nhật SL_Box_plc
+function updateSLBoxPLC() {
+  // Lấy dữ liệu từ bảng excel_import
+  const excelImportQuery = `SELECT com_data AS code, so_luong_box FROM plc_data`;
+  connection.query(excelImportQuery, (err, excelRows) => {
+    if (err) {
+      console.log('SQL Error:', err);
+      return;
+    }
 
+    // Duyệt qua từng dòng trong bảng excel_import
+    excelRows.forEach(excelRow => {
+      const excelCode = excelRow.code;
+      const excelSLBox = excelRow.so_luong_box;
+
+      // Cập nhật giá trị SL_Box_plc trong bảng plc_data nếu mã trùng khớp
+      const updatePLCDataQuery = `
+        UPDATE import_excel
+        SET SL_real = ${excelSLBox}
+        WHERE C_B = '${excelCode}'
+      `;
+
+      connection.query(updatePLCDataQuery, (err, result) => {
+        if (err) {
+          console.log('SQL Error:', err);
+        } else {
+          // console.log(`Updated SL_Box_plc for com_data '${excelCode}':`, result);
+        }
+      });
+    });
+  });
+}
