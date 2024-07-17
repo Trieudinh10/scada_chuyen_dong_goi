@@ -1,9 +1,9 @@
 const path = require("path");
 const connection = require("../../config/database");
 const plc_data_excel = require("../../public/js/fn_excel");
-const plc_import_excel = require("../../public/js/fn_excel_import");
+const plc_import_excel = require("../../public/js/fn_excel_import_selector");
 const Excel_plc_data = require("exceljs");
-const Excel_import = require("exceljs");
+const Excel_import_selector = require("exceljs");
 var io = require("../../index");
 // /Hàm tìm kiếm ở bảng lỗi
 //------------------------Tìm kiếm kiểu date
@@ -67,7 +67,7 @@ module.exports.fn_main_search_plc_data = function (socket, SQL_Excel_plc_data) {
 };
 
 //------------------------Tìm kiếm kiểu slector option
-module.exports.fn_main_search_import1 = function (socket,SQL_Excel_import) {
+module.exports.fn_main_search_import_selector = function (socket,SQL_Excel_import_selector) {
   // Lấy các giá trị không lặp lại từ trường Case_No
   socket.on("get_case_no_options", function () {
     var sqltable_Name = "import_excel"; // Tên bảng
@@ -101,7 +101,7 @@ module.exports.fn_main_search_import1 = function (socket,SQL_Excel_import) {
   });
 
   // Xử lý yêu cầu tìm kiếm theo giá trị Case_No và result
-  socket.on("msg_import_ByTime_", function (searchValues) {
+  socket.on("msg_import_ByTime_selector", function (searchValues) {
     var sqltable_Name = "import_excel"; // Tên bảng
     var caseNo = searchValues.caseNo;
     var result = searchValues.result;
@@ -125,19 +125,19 @@ module.exports.fn_main_search_import1 = function (socket,SQL_Excel_import) {
       } else {
         const objectifyRawPacket = (row) => ({ ...row });
         const convertedResponse = results.map(objectifyRawPacket);
-        socket.emit("import_ByTime_", convertedResponse);
-        SQL_Excel_import = convertedResponse; // Xuất báo cáo Excel
+        socket.emit("import_ByTime_selector", convertedResponse);
+        SQL_Excel_import_selector = convertedResponse; // Xuất báo cáo Excel
       }
     });
   });
 
-  socket.on("msg_Excel_Report_import", () => {
-    plc_import_excel.fn_excelExport_import(
-      Excel_import,
+  socket.on("msg_Excel_Report_import_selector", () => {
+    plc_import_excel.fn_excelExport_import_selector(
+      Excel_import_selector,
       "CHECKLIST DỮ LIỆU HÀNG HOÁ NHÀ MÁY ĐÓNG GÓI",
-      SQL_Excel_import,
+      SQL_Excel_import_selector,
       "Packing_list",
-      "send_Excel_Report_import",
+      "send_Excel_Report_import_selector",
       socket
     );
   });

@@ -12,7 +12,7 @@
     <script src = "js/FC_Common.js"></script>
     <script src = "js/fn_show_plc_data.js"></script>
     <script src = "js/fn_show_import_selector.js"></script>
-    <script src = "js/fn_excel_import.js"></script>
+    <script src = "js/fn_excel_import_selector.js"></script>
     <script src = "socket.io/socket.io.js"></script>
     <script src = "js/jquery-3.6.0.min.js"></script>
     <script src = "js/FileSaver.js"></script> 
@@ -33,32 +33,31 @@
         <div class="cnt_">
              
 
-            <div id="import" class="block_1">
+            <div id="import_selector" class="block_1">
                 <!-- <img id="loadingImage_" class="img_loading1" src="/images/dev_Q/loading.png" /> -->
-                <script> fn_import_Show();</script>
-                <script> fn_import_Show_();</script>
+               
                 <div class="thanh_trichxuat_sb_error">
                     <div class="row_flex">  
                         
-                        <select id="caseNoSelector" class="searchInput" onchange="fn_import_By_Time();">
+                        <select id="caseNoSelector" class="searchInput" onchange="fn_import_selector_By_Time();">
                             <option value=""><%= __('Select Case No') %></option>
                         </select>
 
-                        <select id="resultSelector" class="searchInput" onchange="fn_import_By_Time();">
+                        <select id="resultSelector" class="searchInput" onchange="fn_import_selector_By_Time();">
                             <option value=""><%= __('Select Result') %></option>
                         </select>
                     </div>
 
                     <div class="row_flex">
-                        <div id="pagination_box_" class="pagination_box">
-                            <button class="btn_page prev" id="prevPage_" onclick="funcprev_()">                               
+                        <div id="pagination_box__" class="pagination_box">
+                            <button class="btn_page prev" id="prevPage__" onclick="funcprev__()">                               
                                 <i class='bx bx-chevron-left'></i>
                             </button>
-                            <input id="pageNumberInput_" class="pageNumberInput" min="1" value="1">
-                            <button class="btn_page next" id="nextPage_" onclick="funcfor_()">                             
+                            <input id="pageNumberInput__" class="pageNumberInput" min="1" value="1">
+                            <button class="btn_page next" id="nextPage__" onclick="funcfor__()">                             
                                 <i class='bx bx-chevron-right' ></i>                          
                             </button>
-                            <button class="btn_page goto" id="goToPage_" onclick="funcsearch_()">                               
+                            <button class="btn_page goto" id="goToPage__" onclick="funcsearch__()">                               
                                 <i class='bx bx-chevrons-right' ></i>
                             </button>
                         </div>
@@ -66,22 +65,22 @@
 
                     <div class="row_flex">
                         <div class="xoay">
-                            <img id="loadingImage_" class="img_loading1" src="/images/dev_Q/loading.png" />
+                            <img id="loadingImage__" class="img_loading1" src="/images/dev_Q/loading.png" />
                         </div>  
 
-                        <button class="btt_trich_xuat btt_orange" onclick="fn_import_Show();" title="<%= __('Refresh') %> ">
+                        <button class="btt_trich_xuat btt_orange" onclick="fn_import_selector_Show();" title="<%= __('Refresh') %> ">
                             <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>
                         </button>    
                         
-                        <button class="btt_trich_xuat btt_green" onclick="fn_excel_import();" title="<%= __('Export report') %>">
+                        <button class="btt_trich_xuat btt_green" onclick="fn_excel_import_selector();" title="<%= __('Export report') %>">
                             <i class="fa-regular fa-file-excel btn_i" aria-hidden="true"></i>
                         </button>
                     </div>
              
 
              </div>
-                <div id="div_table_import">
-                    <table id="table_import">
+                <div id="div_table_import_selector">
+                    <table id="table_import_selector">
                         <thead>
                             <tr>
                                 <th >
@@ -107,12 +106,12 @@
         </div>
 
 
-
-
-        <script>fn_excel_display_import();</script>
+        <script> fn_import_selector_Show();</script>
+        <script> fn_import_selector_Show_();</script>
+        <script> fn_excel_display_import_selector();</script>
 
         <script>
-            fn_import_By_Time_display();
+            fn_import_selector_By_Time_display();
             fn_case_no(); 
             fn_result_options();             
         </script>

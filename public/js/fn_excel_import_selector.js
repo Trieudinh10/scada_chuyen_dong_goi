@@ -1,20 +1,20 @@
 /////////////////// Excel bảng import dùng lưu trữ dữ liệu//////////////
-function fn_excel_import() {
-    socket.emit("msg_Excel_Report_import", true);
-    var loadingImage = document.getElementById('loadingImage_');
+function fn_excel_import_selector() {
+    socket.emit("msg_Excel_Report_import_selector", true);
+    var loadingImage = document.getElementById('loadingImage__');
 if (loadingImage) {loadingImage.style.display = 'block';}
-document.getElementById('import').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
+document.getElementById('import_selector').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
 
 }
-function fn_excel_display_import() {
-    socket.on('send_Excel_Report_import', (buffer) => {
+function fn_excel_display_import_selector() {
+    socket.on('send_Excel_Report_import_selector', (buffer) => {
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.download = "Packing_list.xlsx";
         link.click();
-        document.getElementById('loadingImage_').style.display = 'none';
-        document.getElementById('import').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
+        document.getElementById('loadingImage__').style.display = 'none';
+        document.getElementById('import_selector').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
          
     })
     console.log('15');
@@ -22,7 +22,7 @@ function fn_excel_display_import() {
  
 
 module.exports = {
-    fn_excelExport_import: function (Excel_name, Name_tittle, SQL_excel, Name_report, socket_emit, socket) {
+    fn_excelExport_import_selector: function (Excel_name, Name_tittle, SQL_excel, Name_report, socket_emit, socket) {
         // =====================CÁC THUỘC TÍNH CHUNG=====================
         // Lấy ngày tháng hiện tại
         let date_ob = new Date();

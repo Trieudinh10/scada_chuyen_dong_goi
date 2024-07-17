@@ -2,7 +2,7 @@ const func_main = require("./fn_main");
 const path = require("path");
 const connection = require("../../config/database");
 var SQL_Excel_plc_data = [];
-var SQL_Excel_import = [];
+var SQL_Excel_import_selector = [];
 
 var io = require("../../index");
 // TÌM KIẾM BÁO CÁO  Ở INDEX
@@ -22,12 +22,19 @@ module.exports.func_main_index = function (socket) {
     "import_excel",
     "import_Show"
   );
+ //Hàm show selector
+ func_main.fn_main_show(
+  socket,
+  "msg_import_selector_Show",
+  "import_excel",
+  "import_selector_Show"
+);
 
   //------------------------Tìm kiếm kiểu date
   func_main.fn_main_search_plc_data(socket, SQL_Excel_plc_data);
 
   //------------------------Tìm kiếm kiểu slector option
-  func_main.fn_main_search_import1(socket,SQL_Excel_import);
+  func_main.fn_main_search_import_selector(socket,SQL_Excel_import_selector);
 };
 
  //------------------------Tìm kiếm kiểu Real PLC

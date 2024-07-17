@@ -2,52 +2,52 @@
 // <!-- ---------------------------------------SELECT OPTION -------------------------->
  
 // Yêu cầu dữ liệu bảng
-var currentPage_ = 1;
-var itemsPerPage_ = 100;
-var totalPages_ = 0;
-var data_full_ = [];
+var currentPage__ = 1;
+var itemsPerPage__ = 1000;
+var totalPages__ = 0;
+var data_full__ = [];
 
-function updatePagination_() {
-    var totalItems = data_full_.length;
-    totalPages_ = Math.ceil(totalItems / itemsPerPage_);
-    $("#pageNumberInput_").val(currentPage_ + " / " + totalPages_);
-    $("#totalPages_").text(totalPages_);
+function updatePagination__() {
+    var totalItems = data_full__.length;
+    totalPages__ = Math.ceil(totalItems / itemsPerPage__);
+    $("#pageNumberInput__").val(currentPage__ + " / " + totalPages__);
+    $("#totalPages__").text(totalPages__);
 }
 
 // Khi nút "Trang trước" được nhấp
-function funcprev_() {
-    if (currentPage_ > 1) {
-        currentPage_--;
-        fn_table_master_full_(data_full_, currentPage_, itemsPerPage_);
-        updatePagination_();
+function funcprev__() {
+    if (currentPage__ > 1) {
+        currentPage__--;
+        fn_table_master_full__(data_full__, currentPage__, itemsPerPage__);
+        updatePagination__();
     }
 }
 
 // Khi nút "Trang sau" được nhấp
-function funcfor_() {
-    if (currentPage_ < Math.ceil(data_full_.length / itemsPerPage_)) {
-        currentPage_++;
-        fn_table_master_full_(data_full_, currentPage_, itemsPerPage_);
-        updatePagination_();
+function funcfor__() {
+    if (currentPage__ < Math.ceil(data_full__.length / itemsPerPage__)) {
+        currentPage__++;
+        fn_table_master_full__(data_full__, currentPage__, itemsPerPage__);
+        updatePagination__();
     }
 }
-function funcsearch_() {
-    var inputPage = parseInt($("#pageNumberInput_").val());
-    if (!isNaN(inputPage) && inputPage >= 1 && inputPage <= Math.ceil(data_full_.length / itemsPerPage_)) {
-        currentPage_ = inputPage;
-        fn_table_master_full_(data_full_, currentPage_, itemsPerPage_);
-        updatePagination_();
+function funcsearch__() {
+    var inputPage = parseInt($("#pageNumberInput__").val());
+    if (!isNaN(inputPage) && inputPage >= 1 && inputPage <= Math.ceil(data_full__.length / itemsPerPage__)) {
+        currentPage__ = inputPage;
+        fn_table_master_full__(data_full__, currentPage__, itemsPerPage__);
+        updatePagination__();
     }
-    if (!isNaN(inputPage) && inputPage > totalPages_) {
+    if (!isNaN(inputPage) && inputPage > totalPages__) {
        
         alert("Vui lòng chọn lại số trang nhỏ hơn tổng số trang!");
     }
 }
 
-function fn_table_master_single_(data) {
-    $("#pagination_box_").css("display", "none"); // Ẩn phần tử có id là "goToPage"
+function fn_table_master_single__(data) {
+    $("#pagination_box__").css("display", "none"); // Ẩn phần tử có id là "goToPage"
     if (data) {
-        $("#table_import tbody").remove();
+        $("#table_import_selector tbody").remove();
         var len = data.length;
         var txt = "<tbody>";
         if (len > 0) {
@@ -69,19 +69,20 @@ function fn_table_master_single_(data) {
             }
            
                 txt += "</tbody>";
-                $("#table_import").append(txt);
+                $("#table_import_selector").append(txt);
             
         }
     }
 }
 
-function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
+ 
+function fn_table_master_full__(data, currentPage__, itemsPerPage__) {
     if (data) {
-        $("#pagination_box_").css("display", "flex");
-        $("#table_import tbody").remove();
+        $("#pagination_box__").css("display", "flex");
+        $("#table_import_selector tbody").remove();
         var len = data.length;
-        var startIdx = (currentPage_ - 1) * itemsPerPage_;
-        var endIdx = Math.min(startIdx + itemsPerPage_, len);
+        var startIdx = (currentPage__ - 1) * itemsPerPage__;
+        var endIdx = Math.min(startIdx + itemsPerPage__, len);
         var txt = "<tbody>";
         for (var i = startIdx; i < endIdx; i++) {
             var resultClass = "";
@@ -100,58 +101,58 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
             + "</td></tr>";
         }
         txt += "</tbody>";
-        $("#table_import").append(txt);
+        $("#table_import_selector").append(txt);
     }
 }
     // Chương trình con đọc dữ liệu SQL
-    function fn_import_Show() {
-        currentPage_ = 1;
-        socket.emit("msg_import_Show", "true");
-        var loadingImage_ = document.getElementById('loadingImage_');
-        if (loadingImage_) {loadingImage_.style.display = 'block';}
-        document.getElementById('import').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
+    function fn_import_selector_Show() {
+        currentPage__ = 1;
+        socket.emit("msg_import_selector_Show", "true");
+        var loadingImage__ = document.getElementById('loadingImage__');
+        if (loadingImage__) {loadingImage__.style.display = 'block';}
+        document.getElementById('import_selector').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
     }
-    function fn_import_Show_() { 
-        socket.on('import_Show', function (data) {
-            fn_table_master_single_(data); // Hiển thị dữ liệu bảng
-            $("#pageNumberInput_").val(1);
-            $("#totalPages_").text(1);
+    function fn_import_selector_Show_() { 
+        socket.on('import_selector_Show', function (data) {
+            fn_table_master_single__(data); // Hiển thị dữ liệu bảng
+            $("#pageNumberInput__").val(1);
+            $("#totalPages__").text(1);
              document.getElementById('caseNoSelector').value = ""; // Gán giá trị mặc định
              document.getElementById('resultSelector').value = ""; // Gán giá trị mặc định
-            currentPage_ = 1;
-            totalPages_ = 0;
-            data_full_ = [];
-            console.log('29');
-            document.getElementById('loadingImage_').style.display = 'none';
-            document.getElementById('import').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
+            currentPage__ = 1;
+            totalPages__ = 0;
+            data_full__ = [];
+            console.log('30');
+            document.getElementById('loadingImage__').style.display = 'none';
+            document.getElementById('import_selector').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
         });
     }
  
-    function fn_import_By_Time() {
+    function fn_import_selector_By_Time() {
         var caseNoSelector = document.getElementById('caseNoSelector');
         var resultSelector = document.getElementById('resultSelector');
         var searchValueCaseNo = caseNoSelector.value; // Lấy giá trị từ selector Case No
         var searchValueResult = resultSelector.value; // Lấy giá trị từ selector Result
     
-        socket.emit('msg_import_ByTime_', { caseNo: searchValueCaseNo, result: searchValueResult });
+        socket.emit('msg_import_ByTime_selector', { caseNo: searchValueCaseNo, result: searchValueResult });
     
-        var loadingImage_ = document.getElementById('loadingImage_');
-        if (loadingImage_) {
-            loadingImage_.style.display = 'block';
+        var loadingImage__ = document.getElementById('loadingImage__');
+        if (loadingImage__) {
+            loadingImage__.style.display = 'block';
         }
-        document.getElementById('import').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
+        document.getElementById('import_selector').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
     }
     
     
     // Lấy dữ liệu từ phía server gửi qua
-    function fn_import_By_Time_display() {
-        socket.on('import_ByTime_', function (receivedData) {
-            data_full_ = []; // Làm rỗng data_full_ trước khi nhận dữ liệu mới
-            data_full_ = data_full_.concat(receivedData);
-            fn_table_master_full_(data_full_, currentPage_, itemsPerPage_);
-            updatePagination_();
-            document.getElementById('loadingImage_').style.display = 'none';
-            document.getElementById('import').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
+    function fn_import_selector_By_Time_display() {
+        socket.on('import_ByTime_selector', function (receivedData) {
+            data_full__ = []; // Làm rỗng data_full__ trước khi nhận dữ liệu mới
+            data_full__ = data_full__.concat(receivedData);
+            fn_table_master_full__(data_full__, currentPage__, itemsPerPage__);
+            updatePagination__();
+            document.getElementById('loadingImage__').style.display = 'none';
+            document.getElementById('import_selector').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
         });
     }
     
@@ -184,4 +185,6 @@ function fn_table_master_full_(data, currentPage_, itemsPerPage_) {
           });
         });
       }
-    
+
+
+    // setInterval(fn_import_selector_Show, 500);
