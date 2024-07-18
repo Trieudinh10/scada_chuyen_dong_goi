@@ -157,7 +157,7 @@ function valuesReady(anythingBad, values) {
   if (anythingBad) { console.log("Lỗi khi đọc dữ liệu tag"); } // Cảnh báo lỗi
   var lodash = require('lodash'); // Chuyển variable sang array
   arr_tag_value = lodash.map(values, (item) => item);
-  console.log("Data S1", arr_tag_value); // Hiển thị giá trị để kiểm tra
+  // console.log("Data S1", arr_tag_value); // Hiển thị giá trị để kiểm tra
   obj_tag_value = values;
 }
 
@@ -172,15 +172,14 @@ function fn_read_data_scan() {
   func_main_all_Q.fn_main_compare(io,obj_tag_value);
   func_main_all_Q.fn_main_update();
   //------------------------------------------------- DEV_Q----------------------------------------- //
- 
 }
-
+ 
 // Time cập nhật mỗi 1s
 setInterval(
   () => fn_read_data_scan(),
-  1000// 1s = 1000ms
+  150// 1s = 1000ms
 );
-
+ 
 let com_data = [];
 
 function fn_tag() {
@@ -194,14 +193,12 @@ function fn_tag() {
 
   // --------------TAG Case No ----------------- //
   const data_case_keys = [
-    "DATA_CASE", "DATA_CASE_1", "DATA_CASE_2", "DATA_CASE_3", "DATA_CASE_4", "DATA_CASE_5",
-    "DATA_CASE_6", "DATA_CASE_7", "DATA_CASE_8", "DATA_CASE_9", "DATA_CASE_10",
-    "DATA_CASE_11", "DATA_CASE_12", "DATA_CASE_13", "DATA_CASE_14", "DATA_CASE_15",
-    "DATA_CASE_16", "DATA_CASE_17", "DATA_CASE_18", "DATA_CASE_19" 
+    "DATA_KIEN", "DATA_KIEN_1", "DATA_KIEN_2", "DATA_KIEN_3", "DATA_KIEN_4", "DATA_KIEN_5",
+    "DATA_KIEN_6", "DATA_KIEN_7", "DATA_KIEN_8", "DATA_KIEN_9", "DATA_KIEN_10" 
   ];
 
   // --------------TAG Triger ----------------- //
-  const other_keys = ["Trig_Data", "test"];
+  const other_keys = ["Trig_Data","Trig_Kien"];
 
   if (!obj_tag_value) {
     console.log("obj_tag_value is undefined");
@@ -233,9 +230,9 @@ function fn_tag() {
   // --------------Fn Part No ----------------- //
   const char_data_array = convertToCharArray(data_keys);
   const char_data = char_data_array.join('');
-  console.log("Array Part No:", char_data_array);
-  console.log("Value Part No:", char_data);
-  emitEvents(data_keys, char_data_array);
+  // console.log("Array Part No:", char_data_array);
+  // console.log("Value Part No:", char_data);
+  // emitEvents(data_keys, char_data_array);
   let com_data = char_data; 
   obj_tag_value["com_data"] = com_data;
   io.sockets.emit("com_data", com_data);
@@ -243,10 +240,10 @@ function fn_tag() {
   // --------------Fn Case No ----------------- //
   const char_data_case_array = convertToCharArray(data_case_keys);
   const char_data_case = char_data_case_array.join('');
-  console.log("Array Case No:", char_data_case_array);
-  console.log("Value Case No:", char_data_case);
+  // console.log("Array Case No:", char_data_case_array);
+  // console.log("Value Case No:", char_data_case);
   let com_data_case = char_data_case;  
-  emitEvents(data_case_keys, char_data_case_array);
+  // emitEvents(data_case_keys, char_data_case_array);
   obj_tag_value["com_data_case"] = com_data_case;
   io.sockets.emit("com_data_case", com_data_case);
   io.sockets.emit("all_com_data", [com_data, com_data_case]);
@@ -312,7 +309,7 @@ function plc_tag() {
 
   // Cập nhật oldTrigData để theo dõi trạng thái trước đó của Trig_Data
   oldTrigData = obj_tag_value["Trig_Data"];
-  console.log('oldTrigData:', oldTrigData);
+  // console.log('oldTrigData:', oldTrigData);
 }
 
 // HÀM GHI DỮ LIỆU XUỐNG PLC

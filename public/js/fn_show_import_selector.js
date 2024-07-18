@@ -118,6 +118,7 @@ function fn_table_master_full__(data, currentPage__, itemsPerPage__) {
             $("#pageNumberInput__").val(1);
             $("#totalPages__").text(1);
              document.getElementById('caseNoSelector').value = ""; // Gán giá trị mặc định
+             document.getElementById('partNoSelector').value = ""; // Gán giá trị mặc định
              document.getElementById('resultSelector').value = ""; // Gán giá trị mặc định
             currentPage__ = 1;
             totalPages__ = 0;
@@ -130,11 +131,13 @@ function fn_table_master_full__(data, currentPage__, itemsPerPage__) {
  
     function fn_import_selector_By_Time() {
         var caseNoSelector = document.getElementById('caseNoSelector');
+        var partNoSelector = document.getElementById('partNoSelector');
         var resultSelector = document.getElementById('resultSelector');
         var searchValueCaseNo = caseNoSelector.value; // Lấy giá trị từ selector Case No
+        var searchValuePartNo = partNoSelector.value; // Lấy giá trị từ selector Part No
         var searchValueResult = resultSelector.value; // Lấy giá trị từ selector Result
     
-        socket.emit('msg_import_ByTime_selector', { caseNo: searchValueCaseNo, result: searchValueResult });
+        socket.emit('msg_import_ByTime_selector', { caseNo: searchValueCaseNo, partNo: searchValuePartNo, result: searchValueResult });
     
         var loadingImage__ = document.getElementById('loadingImage__');
         if (loadingImage__) {
@@ -171,6 +174,20 @@ function fn_table_master_full__(data, currentPage__, itemsPerPage__) {
          });
         });
     }
+    function fn_part_no(){
+        // Yêu cầu server gửi danh sách các giá trị Part_No không lặp lại
+        socket.emit('get_part_no_options');
+        // Nhận danh sách các giá trị Part_No từ server và cập nhật selector
+        socket.on('part_no_options', function(partNoOptions) {
+            var partNoSelector = document.getElementById('partNoSelector');
+            partNoOptions.forEach(function(optionValue) {
+                var option = document.createElement('option');
+                option.value = optionValue;
+                option.text = optionValue;
+                partNoSelector.add(option);
+             });
+            });
+        }
     function fn_result_options(){
         // Yêu cầu server gửi danh sách các giá trị result không lặp lại
         socket.emit('get_result_options');

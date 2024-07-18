@@ -7,7 +7,7 @@ var SQL_Excel_import_selector = [];
 var io = require("../../index");
 // TÌM KIẾM BÁO CÁO  Ở INDEX
 module.exports.func_main_index = function (socket) {
-  //Hàm show data plc
+  //Hàm show data plc 
   func_main.fn_main_show(
     socket,
     "msg_plc_data_Show",
@@ -15,19 +15,20 @@ module.exports.func_main_index = function (socket) {
     "plc_data_Show"
   );
 
-  //Hàm show import
+  //Hàm show import 
   func_main.fn_main_show(
     socket,
     "msg_import_Show",
     "import_excel",
     "import_Show"
   );
- //Hàm show selector
- func_main.fn_main_show(
+ //Hàm show selector slector
+ func_main.fn_main_slector_show(
   socket,
   "msg_import_selector_Show",
   "import_excel",
-  "import_selector_Show"
+  "import_selector_Show",
+  SQL_Excel_import_selector
 );
 
   //------------------------Tìm kiếm kiểu date
@@ -109,7 +110,7 @@ module.exports.fn_main_compare = function (io, obj_tag_value) {
   });
 };
 
-//------------------------Up date các giá trị đủ thiếu dư
+//------------------------Up date insert các giá trị đủ thiếu dư vao sql
 module.exports.fn_main_update = function () {
   var sqltable_Name = "import_excel"; // Tên bảng
   var fields = ["SL_Box", "SL_Real"]; // Các trường cần lấy

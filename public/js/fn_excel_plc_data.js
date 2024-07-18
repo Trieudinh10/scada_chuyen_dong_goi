@@ -1,61 +1,32 @@
-/////////////////// Excel bảng import dùng lưu trữ dữ liệu//////////////
-// -----------------Xuất theo kết quả tìm kiếm----------------------//
-function fn_excel_import_selector_detail() {
-    socket.emit("msg_Excel_Report_import_selector_detail", true);
-    var loadingImage = document.getElementById('loadingImage__');
-if (loadingImage) {loadingImage.style.display = 'block';}
-document.getElementById('import_selector').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
 
+
+// --------------------------------------------plc data----------------------------------------
+/////////////////// Excel bảng plc_data dùng lưu trữ dữ liệu//////////////
+function fn_excel_plc_data() {
+    socket.emit("msg_Excel_Report_plc_data", true);
+    var loadingImage = document.getElementById('loadingImage');
+    if (loadingImage) {loadingImage.style.display = 'block';}
+    document.getElementById('plc_data').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
 }
-function fn_excel_display_import_selector_detail() {
-    socket.on('send_Excel_Report_import_selector_detail', (buffer) => {
+
+function fn_excel_display_plc_data() {
+    socket.on('send_Excel_Report_plc_data', (buffer) => {
         const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        
-        // Retrieve the values of case_no and result
-        const case_no = document.getElementById('caseNoSelector').value;
-        const part_no = document.getElementById('partNoSelector').value;
-        const result = document.getElementById('resultSelector').value;
-        
-        // Set the download attribute dynamically
-        link.download = `Packing_list_${case_no}_${part_no}_${result}.xlsx`;
+        link.download = "Packing_list.xlsx";
         link.click();
-        
-        // Hide the loading image and re-enable pointer events
-        document.getElementById('loadingImage__').style.display = 'none';
-        document.getElementById('import_selector').style.pointerEvents = 'auto'; // Enable pointer events
-    });
+        document.getElementById('loadingImage').style.display = 'none';
+        document.getElementById('plc_data').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
+    })
     console.log('15');
 }
-
-
-
-// -----------------Xuất theo tổng file----------------------//
-function fn_excel_import_selector() {
-    socket.emit("msg_Excel_Report_import_selector", true);
-    var loadingImage = document.getElementById('loadingImage__');
-if (loadingImage) {loadingImage.style.display = 'block';}
-document.getElementById('import_selector').style.pointerEvents = 'none'; // Không cho phép chọn bằng chuột
-
-}
-function fn_excel_display_import_selector() {
-    socket.on('send_Excel_Report_import_selector', (buffer) => {
-        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        const link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = "Packing_list_all.xlsx";
-        link.click();
-        document.getElementById('loadingImage__').style.display = 'none';
-        document.getElementById('import_selector').style.pointerEvents = 'auto'; // Cho phép chọn bằng chuột
-         
-    })
-    console.log('16');
-}
  
- 
+
+// const moment = require("moment-timezone"); // Import the moment-timezone library
+
 // module.exports = {
-//     fn_excelExport_import_selector: function (Excel_name, Name_tittle, SQL_excel, Name_report, socket_emit, socket) {
+//     fn_excelExport_plc_data: function (Excel_name, Name_tittle, SQL_excel, Name_report, socket_emit, socket) {
 //         // =====================CÁC THUỘC TÍNH CHUNG=====================
 //         // Lấy ngày tháng hiện tại
 //         let date_ob = new Date();
@@ -88,7 +59,7 @@ function fn_excel_display_import_selector() {
 //             top: 0.75, bottom: 0.75,
 //             header: 0.3, footer: 0.3
 //         };
-       
+//         console.log('2');
 //         // =====================THẾT KẾ HEADER=====================
 //         // Logo công ty
 //         const imageId1 = workbook.addImage({
@@ -104,40 +75,44 @@ function fn_excel_display_import_selector() {
 //         worksheet.getCell('C3').value = 'Hotline: + 0904 701 605';
 //         // Tên báo cáo
 //         worksheet.getCell('A5').value = Name_tittle;
-//         worksheet.mergeCells('A5:F5');
+//         worksheet.mergeCells('A5:D5');
 //         worksheet.getCell('A5').style = { font: { name: 'Times New Roman', bold: true, size: 16 }, alignment: { horizontal: 'center', vertical: 'middle' } };
 //         // Ngày in biểu
-//         worksheet.getCell('F6').value = "Ngày in biểu: " + dayName + " " + date + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
-//         worksheet.getCell('F6').style = { font: { bold: false, italic: true }, alignment: { horizontal: 'right', vertical: 'bottom', wrapText: false } };
+//         worksheet.getCell('D6').value = "Ngày in biểu: " + dayName + " " + date + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds;
+//         worksheet.getCell('D6').style = { font: { bold: false, italic: true }, alignment: { horizontal: 'right', vertical: 'bottom', wrapText: false } };
 //         // Tên nhãn các cột
 //         var rowpos = 7;
-//         var collumName = ["STT", "Case No", "C/B", "SL Box", "SL Box thực tế", "Kết quả"]
+//         var collumName = ["STT", "Thời gian", "Mã thùng", "Số lượng box" ]
 //         worksheet.spliceRows(rowpos, 1, collumName);
 
 //         // =====================XUẤT DỮ LIỆU EXCEL SQL=====================
+//         console.log('3');
 //         // Dump all the data into Excel
 //         var rowIndex = 0;
 //         SQL_excel.forEach((e, index) => {
+//             // Chuyển đổi thời gian sang múi giờ "Asia/Ho_Chi_Minh"
+//             const localTime = moment(e.date_time).tz("Asia/Ho_Chi_Minh").format("YYYY-MM-DD HH:mm:ss");
+            
 //             // row 1 is the header.
 //             rowIndex = index + rowpos;
 //             // worksheet1 collum
 //             worksheet.columns = [
 //                 { key: 'STT' },
-//                 { key: 'Case_No' },
-//                 { key: 'C_B' },
-//                 { key: 'SL_Box' },
-//                 { key: 'SL_Real' },
-//                 { key: 'result' }
+//                 { key: 'date_time', style: { numFmt: 'dd/mm/yyyy hh:mm:ss' }},
+//                 { key: 'com_data' },
+//                 { key: 'so_luong_box' }
 //             ]
 //             worksheet.addRow({
 //                 STT: index + 1,
-//                 ...e
-//             })
-//         })
-
+//                 date_time: localTime,
+//                 com_data: e.com_data,
+//                 so_luong_box: e.so_luong_box
+//             });
+//         });
+//         const totalNumberOfRows = worksheet.rowCount;
 //         // =====================STYLE CHO CÁC CỘT/HÀNG=====================
 //         // Style các cột nhãn
-//         const HeaderStyle = ['A', 'B', 'C', 'D', 'E', 'F'];
+//         const HeaderStyle = ['A', 'B', 'C', 'D'];
 //         HeaderStyle.forEach((v) => {
 //             worksheet.getCell(`${v}${rowpos}`).style = { font: { bold: true }, alignment: { horizontal: 'center', vertical: 'middle', wrapText: true } };
 //             worksheet.getCell(`${v}${rowpos}`).border = {
@@ -149,7 +124,7 @@ function fn_excel_display_import_selector() {
 //         });
 //         // Cài đặt độ rộng cột
 //         worksheet.columns.forEach((column, index) => {
-//             column.width = 20;
+//             column.width = 30;
 //         });
 //         // Set width header
 //         worksheet.getColumn(1).width = 7;
@@ -160,7 +135,7 @@ function fn_excel_display_import_selector() {
 //             var rowindex = rowNumber + datastartrow;
 //             const rowlength = datastartrow + SQL_excel.length;
 //             if (rowindex >= rowlength) { rowindex = rowlength; }
-//             const insideColumns = ['A', 'B', 'C', 'D', 'E', 'F'];
+//             const insideColumns = ['A', 'B', 'C', 'D'];
 //             // Tạo border
 //             insideColumns.forEach((v) => {
 //                 // Border
@@ -174,48 +149,25 @@ function fn_excel_display_import_selector() {
 //                 worksheet.getCell(`${v}${rowindex}`).alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
 //             });
 //         });
-
-//         // =====================THÊM ĐIỀU KIỆN ĐỊNH DẠNG CHO CỘT KẾT QUẢ=====================
-//         SQL_excel.forEach((e, index) => {
-//             let cell = worksheet.getCell(`F${index + rowpos + 1}`);
-//             if (e.result === 'Thiếu') {
-//                 cell.fill = {
-//                     type: 'pattern',
-//                     pattern: 'solid',
-//                     fgColor: { argb: 'FFFF0000' }, // Màu đỏ
-//                 };
-//             } else if (e.result === 'Dư') {
-//                 cell.fill = {
-//                     type: 'pattern',
-//                     pattern: 'solid',
-//                     fgColor: { argb: 'FFFFFF00' }, // Màu vàng
-//                 };
-//             } else if (e.result === 'Đủ') {
-//                 cell.fill = {
-//                     type: 'pattern',
-//                     pattern: 'solid',
-//                     fgColor: { argb: 'FF00FF00' }, // Màu xanh
-//                 };
-//             }
-//         });
-
+//         // Align the "Nội dung cảnh báo" column content to the left
+//         // for (let i = rowpos + 1; i <= totalNumberOfRows; i++) {
+//         //     worksheet.getCell(`E${i}`).alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
+//         // }
 //         // =====================THẾT KẾ FOOTER=====================
-//         const totalNumberOfRows = worksheet.rowCount;
-//         worksheet.getCell(`F${totalNumberOfRows + 2}`).value = 'Ngày …………tháng ……………năm 20………';
-//         worksheet.getCell(`F${totalNumberOfRows + 2}`).style = { font: { bold: true, italic: false }, alignment: { horizontal: 'right', vertical: 'middle', wrapText: false } };
+//         worksheet.getCell(`D${totalNumberOfRows + 2}`).value = 'Ngày …………tháng ……………năm 20………';
+//         worksheet.getCell(`D${totalNumberOfRows + 2}`).style = { font: { bold: true, italic: false }, alignment: { horizontal: 'right', vertical: 'middle', wrapText: false } };
 //         worksheet.getCell(`B${totalNumberOfRows + 3}`).value = 'Giám đốc';
 //         worksheet.getCell(`B${totalNumberOfRows + 4}`).value = '(Ký, ghi rõ họ tên)';
 //         worksheet.getCell(`B${totalNumberOfRows + 3}`).style = { font: { bold: true, italic: false }, alignment: { horizontal: 'center', vertical: 'bottom', wrapText: false } };
 //         worksheet.getCell(`B${totalNumberOfRows + 4}`).style = { font: { bold: false, italic: true }, alignment: { horizontal: 'center', vertical: 'top', wrapText: false } };
-//         worksheet.getCell(`D${totalNumberOfRows + 3}`).value = 'Trưởng ca';
+//         worksheet.getCell(`C${totalNumberOfRows + 3}`).value = 'Trưởng ca';
+//         worksheet.getCell(`C${totalNumberOfRows + 4}`).value = '(Ký, ghi rõ họ tên)';
+//         worksheet.getCell(`C${totalNumberOfRows + 3}`).style = { font: { bold: true, italic: false }, alignment: { horizontal: 'center', vertical: 'bottom', wrapText: false } };
+//         worksheet.getCell(`C${totalNumberOfRows + 4}`).style = { font: { bold: false, italic: true }, alignment: { horizontal: 'center', vertical: 'top', wrapText: false } };
+//         worksheet.getCell(`D${totalNumberOfRows + 3}`).value = 'Người in biểu';
 //         worksheet.getCell(`D${totalNumberOfRows + 4}`).value = '(Ký, ghi rõ họ tên)';
 //         worksheet.getCell(`D${totalNumberOfRows + 3}`).style = { font: { bold: true, italic: false }, alignment: { horizontal: 'center', vertical: 'bottom', wrapText: false } };
 //         worksheet.getCell(`D${totalNumberOfRows + 4}`).style = { font: { bold: false, italic: true }, alignment: { horizontal: 'center', vertical: 'top', wrapText: false } };
-//         worksheet.getCell(`F${totalNumberOfRows + 3}`).value = 'Người in biểu';
-//         worksheet.getCell(`F${totalNumberOfRows + 4}`).value = '(Ký, ghi rõ họ tên)';
-//         worksheet.getCell(`F${totalNumberOfRows + 3}`).style = { font: { bold: true, italic: false }, alignment: { horizontal: 'center', vertical: 'bottom', wrapText: false } };
-//         worksheet.getCell(`F${totalNumberOfRows + 4}`).style = { font: { bold: false, italic: true }, alignment: { horizontal: 'center', vertical: 'top', wrapText: false } };
-
 //         // =====================THỰC HIỆN XUẤT DỮ LIỆU EXCEL=====================
 //         //Export Link
 //         var currentTime = year + "_" + month + "_" + date + "_" + hours + "h" + minutes + "m" + seconds + "s";
@@ -227,9 +179,6 @@ function fn_excel_display_import_selector() {
 //         workbook.xlsx.writeBuffer().then((Buffer) => {
 //             socket.emit(socket_emit, Buffer);
 //         });
-//     }
+//     },
 // };
 
-
- 
- 
