@@ -1,26 +1,37 @@
+
+<!-- ---------------------------------------SELECT OPTION -------------------------->
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src = "jquery.js"></script>
+    <link rel="stylesheet" href="/css/test_Q.css">
+    <title><%= __('Data') %></title>
+    <script src = "js/FC_Common.js"></script>
+    <script src="/js/canvasjs.min.js"></script>
     <script src = "socket.io/socket.io.js"></script>
-
+    <script src = "js/jquery-3.6.0.min.js"></script>
+    
+     
+    
+    <script>
+        var socket = io()  
+    </script>
+     
 </head>
-<script>
-    var socket = io(document.location.host);
-  </script>
+
 <body>
     <%- include ('./partials/sidebar') %>
-   <p class="content"><%= __('Chào mừng') %></p>
-<!-- Phần thân của website -->
-    <!-- Nút nhấn chạy động cơ -->
-        <button id="btt_RUN_M1" onclick= "socket.emit('Client-send-cmdM1', true);">RUN MOTOR 1</button>
-    <!-- Nút nhấn dừng động cơ -->
-        <button id="btt_STOP_M1" onclick= "socket.emit('Client-send-cmdM1', false);">STOP MOTOR 1</button>
+        <div class="cnt_">
+             <p>xxxxxx</p>
+      </div>
 
 
-   
+
+
+
 </body>
+
 </html>

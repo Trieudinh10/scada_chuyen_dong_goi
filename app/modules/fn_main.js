@@ -216,7 +216,7 @@ module.exports.fn_main_slector_show = function (
     
   });
   socket.on("msg_Excel_Report_import_selector", () => {
-    plc_import_excel.fn_excelExport_import_selector(
+    form_excel.fn_excelExport_import_selector(
       Excel_import_selector,
       "CHECKLIST DỮ LIỆU HÀNG HOÁ NHÀ MÁY ĐÓNG GÓI",
       SQL_Excel_import_selector,

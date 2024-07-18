@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/test_Q.css">
+    <link rel="stylesheet" href="/css/monitor.css">
     <title><%= __('Monitor') %></title>
     <script src = "js/FC_Common.js"></script>
     <script src = "js/fn_show_plc_data.js"></script>
@@ -73,78 +73,7 @@
                     <input id="result_"  class="iofield_" disabled="disabled" type="text" />
                 </div>
             
-            </div>
-            
-            <!-- Table plc data -->
-            <div id="plc_data" class="block_">
-                <img id="loadingImage" class="img_loading" src="/images/dev_Q/loading.png" />
-                <div class="thanh_trichxuat_sb_error">
-                        <div class="row_flex">
-                            <div class="start_end_sb_error">
-                                <label  class="lable_sb_error">
-                                    <p><%= __('Select start time') %>:</p>
-                                </label>
-                                <input id="dtpk_Start_plc_data" class="dtpk_sb_error" type="datetime-local">
-                            </div>
-
-                            <div  class="start_end_sb_error">
-                                <label class="lable_sb_error">
-                                    <%= __('Select end time') %>:
-                                </label>
-                                <input id="dtpk_End_plc_data" class="dtpk_sb_error" type="datetime-local">
-                            </div>
-
-                            <button  class="btt_trich_xuat btt_blue" onclick="fn_plc_data_By_Time();" title="<%= __('Search') %>"> 
-                                <i class="fa-solid fa-magnifying-glass btn_i" aria-hidden="true"></i>
-                                <!-- <p> <%= __('Search') %></p> -->
-                            </button>  
-
-                        </div>
-
-                        <div class="row_flex">
-                            <div id="pagination_box" class="pagination_box">
-                                <button class="btn_page prev" id="prevPage" onclick="funcprev()">
-                                    <i class='bx bx-chevron-left'></i>
-                                </button>
-                                <input id="pageNumberInput" class="pageNumberInput" min="1" value="1">
-                                <button class="btn_page next" id="nextPage" onclick="funcfor()">
-                                    <i class='bx bx-chevron-right' ></i>                          
-                                </button>
-                                <button class="btn_page goto" id="goToPage" onclick="funcsearch()">
-                                    <i class='bx bx-chevrons-right' ></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="row_flex">
-                            <button class="btt_trich_xuat btt_orange" onclick="fn_plc_data_Show();" title="<%= __('Refresh') %> ">
-                                <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>
-                            </button>
-                            <button class="btt_trich_xuat btt_green" onclick="fn_excel_plc_data();" title="<%= __('Export report') %>">
-                                <i class="fa-regular fa-file-excel btn_i" aria-hidden="true"></i>
-                            </button>
-                        </div>                                        
-                 </div>
-
-                <div id="div_table_plc_data">
-                    <table id="table_plc_data">
-                        <thead>
-                            <tr>
-                                <th >
-                                    <%= __('Time') %>
-                                </th>
-                                <th >
-                                    <%= __('Part No') %>
-                                </th>
-                                <th >
-                                    <%= __('Number of boxes') %>
-                                </th>
-                                
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
+            </div>          
 
             <!-- Table import -->
             <div id="import" class="block_">
@@ -211,58 +140,63 @@
                 </div>
             </div>
 
-            <!-- Table selector -->
-            <!-- <div id="import_selector" class="block_">
-                
+             <!-- Table plc data -->
+             <div id="plc_data" class="block_">
+                <img id="loadingImage" class="img_loading" src="/images/dev_Q/loading.png" />
                 <div class="thanh_trichxuat_sb_error">
-                    <div class="row_flex">  
-                        
-                        <select id="caseNoSelector" class="searchInput" onchange="fn_import_selector_By_Time();">
-                            <option value=""><%= __('Select Case No') %></option>
-                        </select>
+                        <div class="row_flex">
+                            <div class="start_end_sb_error">
+                                <label  class="lable_sb_error">
+                                    <p><%= __('Select start time') %>:</p>
+                                </label>
+                                <input id="dtpk_Start_plc_data" class="dtpk_sb_error" type="datetime-local">
+                            </div>
 
-                        <select id="resultSelector" class="searchInput" onchange="fn_import_selector_By_Time();">
-                            <option value=""><%= __('Select Result') %></option>
-                        </select>
-                    </div>
+                            <div  class="start_end_sb_error">
+                                <label class="lable_sb_error">
+                                    <%= __('Select end time') %>:
+                                </label>
+                                <input id="dtpk_End_plc_data" class="dtpk_sb_error" type="datetime-local">
+                            </div>
 
-                    <div class="row_flex">
-                        <div id="pagination_box__" class="pagination_box">
-                            <button class="btn_page prev" id="prevPage__" onclick="funcprev__()">                               
-                                <i class='bx bx-chevron-left'></i>
-                            </button>
-                            <input id="pageNumberInput__" class="pageNumberInput" min="1" value="1">
-                            <button class="btn_page next" id="nextPage__" onclick="funcfor__()">                             
-                                <i class='bx bx-chevron-right' ></i>                          
-                            </button>
-                            <button class="btn_page goto" id="goToPage__" onclick="funcsearch__()">                               
-                                <i class='bx bx-chevrons-right' ></i>
-                            </button>
+                            <button  class="btt_trich_xuat btt_blue" onclick="fn_plc_data_By_Time();" title="<%= __('Search') %>"> 
+                                <i class="fa-solid fa-magnifying-glass btn_i" aria-hidden="true"></i>
+                                
+                            </button>  
+
                         </div>
-                    </div>
 
-                    <div class="row_flex">
-                        <div class="xoay">
-                            <img id="loadingImage__" class="img_loading1" src="/images/dev_Q/loading.png" />
-                        </div>  
+                        <div class="row_flex">
+                            <div id="pagination_box" class="pagination_box">
+                                <button class="btn_page prev" id="prevPage" onclick="funcprev()">
+                                    <i class='bx bx-chevron-left'></i>
+                                </button>
+                                <input id="pageNumberInput" class="pageNumberInput" min="1" value="1">
+                                <button class="btn_page next" id="nextPage" onclick="funcfor()">
+                                    <i class='bx bx-chevron-right' ></i>                          
+                                </button>
+                                <button class="btn_page goto" id="goToPage" onclick="funcsearch()">
+                                    <i class='bx bx-chevrons-right' ></i>
+                                </button>
+                            </div>
+                        </div>
 
-                        <button class="btt_trich_xuat btt_orange" onclick="fn_import_selector_Show();" title="<%= __('Refresh') %> ">
-                            <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>
-                        </button>    
-                        
-                        <button class="btt_trich_xuat btt_green" onclick="fn_excel_import_selector();" title="<%= __('Export report') %>">
-                            <i class="fa-regular fa-file-excel btn_i" aria-hidden="true"></i>
-                        </button>
-                    </div>
-             
+                        <div class="row_flex">
+                            <button class="btt_trich_xuat btt_orange" onclick="fn_plc_data_Show();" title="<%= __('Refresh') %> ">
+                                <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>
+                            </button>
+                            <button class="btt_trich_xuat btt_green" onclick="fn_excel_plc_data();" title="<%= __('Export report') %>">
+                                <i class="fa-regular fa-file-excel btn_i" aria-hidden="true"></i>
+                            </button>
+                        </div>                                        
+                 </div>
 
-             </div>
-                <div id="div_table_import_selector">
-                    <table id="table_import_selector">
+                <div id="div_table_plc_data">
+                    <table id="table_plc_data">
                         <thead>
                             <tr>
                                 <th >
-                                    <%= __('Case No') %>
+                                    <%= __('Time') %>
                                 </th>
                                 <th >
                                     <%= __('Part No') %>
@@ -270,18 +204,13 @@
                                 <th >
                                     <%= __('Number of boxes') %>
                                 </th>
-                                <th >
-                                    <%= __('Real') %>
-                                </th>
-                                <th >
-                                    <%= __('Result') %>
-                                </th>
+                                
                             </tr>
                         </thead>
                     </table>
                 </div>
-            </div> -->
-
+            </div>
+        
         </div>
 
 
@@ -300,17 +229,7 @@
         <script> fn_import_By_Time_display();</script>
 
 <!-- ---------------table 3----------------------- -->
-        <!-- <script> fn_import_selector_Show();</script>
-        <script> fn_import_selector_Show_();</script>
-        <script> fn_excel_display_import_selector();</script>
-        <script>
-            fn_import_selector_By_Time_display();
-            fn_case_no(); 
-            fn_result_options();             
-        </script> -->
-       
-
-
+         
         <script>
             const locale = {
               full: "<%= __('Full') %>",
