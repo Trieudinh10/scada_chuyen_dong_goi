@@ -353,7 +353,7 @@ function updateSLBoxPLC() {
       // Cập nhật giá trị SL_Box_plc trong bảng plc_data nếu mã trùng khớp
       const updatePLCDataQuery = `
         UPDATE import_excel
-        SET SL_real = ${excelSLBox}
+        SET SL_Real = ${excelSLBox}
         WHERE C_B = '${excelCode}'
       `;
 
