@@ -21,5 +21,9 @@
 	"Monitor": "Monitor",
 	"Data": "Data",
 	"User": "User",
-	"Home": "Home"
+	"Home": "Home",
+	"Result": "Result",
+	"Select Case No": "Select Case No",
+	"Select Result": "Select Result",
+	"Select Part No": "Select Part No"
 }

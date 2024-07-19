@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/test_Q.css">
-    <title>TEST</title>
+    <link rel="stylesheet" href="/css/monitor.css">
+    <title><%= __('Monitor') %></title>
     <script src = "js/FC_Common.js"></script>
     <script src = "js/fn_show_plc_data.js"></script>
     <script src = "js/fn_show_import.js"></script>
-    <script src = "js/fn_excel.js"></script>
+    <script src = "js/fn_excel_plc_data.js"></script>
+    <script src = "js/fn_show_import_selector.js"></script>
+    <script src = "js/fn_excel_import_selector.js"></script>
     <script src = "js/fn_compare.js"></script>
     <script src = "socket.io/socket.io.js"></script>
     <script src = "js/jquery-3.6.0.min.js"></script>
@@ -28,7 +30,7 @@
 <body>
     <%- include ('./partials/sidebar') %>
         <div class="cnt_">
-
+          
             <div class="block_">
                 <div class="item_">
                     <%= __('Case No') %>:
@@ -65,16 +67,81 @@
                 </div>
 
                 <div class="item_">
-                    <%= __('Compare') %>:
+                    <%= __('Result') %>:
                 </div>
                 <div class="item_">
-                    <input id="result"  class="iofield_" disabled="disabled" type="text" />
+                    <input id="result_"  class="iofield_" disabled="disabled" type="text" />
                 </div>
             
+            </div>          
+
+            <!-- Table import -->
+            <div id="import" class="block_">
+                <div class="thanh_trichxuat_sb_error">
+                    <div class="row_flex">  
+
+                        <!-- <input class="searchInput_" disabled="disabled" type="text" id="searchInput"/>                     
+                        <script>
+                            fn_IOField("com_data_case","searchInput");
+                        </script> -->
+                         
+                    </div>
+
+                    <div class="row_flex">
+                        <div id="pagination_box_" class="pagination_box">
+                            <button class="btn_page prev" id="prevPage_" onclick="funcprev_()">                               
+                                <i class='bx bx-chevron-left'></i>
+                            </button>
+                            <input id="pageNumberInput_" class="pageNumberInput" min="1" value="1">
+                            <button class="btn_page next" id="nextPage_" onclick="funcfor_()">                             
+                                <i class='bx bx-chevron-right' ></i>                          
+                            </button>
+                            <button class="btn_page goto" id="goToPage_" onclick="funcsearch_()">                               
+                                <i class='bx bx-chevrons-right' ></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row_flex">
+                        <div class="xoay">
+                            <img id="loadingImage_" class="img_loading1" src="/images/dev_Q/loading.png" />
+                        </div>  
+
+                        <!-- <button class="btt_trich_xuat btt_orange" onclick="fn_import_Show();" title="<%= __('Refresh') %> ">
+                            <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>                            
+                        </button> -->
+                                        
+                    </div>
+             
+
+             </div>
+                <div id="div_table_import">
+                    <table id="table_import">
+                        <thead>
+                            <tr>
+                                <th >
+                                    <%= __('Case No') %>
+                                </th>
+                                <th >
+                                    <%= __('Part No') %>
+                                </th>
+                                <th >
+                                    <%= __('Number of boxes') %>
+                                </th>
+                                <th >
+                                    <%= __('Real') %>
+                                </th>
+                                <th >
+                                    <%= __('Result') %>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
-            
-            <!-- Table plc data -->
-            <div id="plc_data" class="block_">
+
+             <!-- Table plc data -->
+             <div id="plc_data" class="block_">
                 <img id="loadingImage" class="img_loading" src="/images/dev_Q/loading.png" />
                 <div class="thanh_trichxuat_sb_error">
                         <div class="row_flex">
@@ -94,7 +161,7 @@
 
                             <button  class="btt_trich_xuat btt_blue" onclick="fn_plc_data_By_Time();" title="<%= __('Search') %>"> 
                                 <i class="fa-solid fa-magnifying-glass btn_i" aria-hidden="true"></i>
-                                <!-- <p> <%= __('Search') %></p> -->
+                                
                             </button>  
 
                         </div>
@@ -143,86 +210,26 @@
                     </table>
                 </div>
             </div>
-
-            <!-- Table import -->
-            <div id="import" class="block_">
-                <div class="thanh_trichxuat_sb_error">
-                    <div class="row_flex">  
-
-                        <input class="searchInput_" disabled="disabled" type="text" id="searchInput"/>                     
-                        <script>
-                            fn_IOField("com_data_case","searchInput");
-                        </script>
-                         
-                    </div>
-
-                    <div class="row_flex">
-                        <div id="pagination_box_" class="pagination_box">
-                            <button class="btn_page prev" id="prevPage_" onclick="funcprev_()">                               
-                                <i class='bx bx-chevron-left'></i>
-                            </button>
-                            <input id="pageNumberInput_" class="pageNumberInput" min="1" value="1">
-                            <button class="btn_page next" id="nextPage_" onclick="funcfor_()">                             
-                                <i class='bx bx-chevron-right' ></i>                          
-                            </button>
-                            <button class="btn_page goto" id="goToPage_" onclick="funcsearch_()">                               
-                                <i class='bx bx-chevrons-right' ></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="row_flex">
-                        <div class="xoay">
-                            <img id="loadingImage_" class="img_loading1" src="/images/dev_Q/loading1.png" />
-                        </div>  
-
-                        <button class="btt_trich_xuat btt_orange" onclick="fn_import_Show();" title="<%= __('Refresh') %> ">
-                            <i class="fa-solid fa-arrows-rotate btn_i" aria-hidden="true"></i>                            
-                        </button>
-                                        
-                    </div>
-             
-
-             </div>
-                <div id="div_table_import">
-                    <table id="table_import">
-                        <thead>
-                            <tr>
-                                <th >
-                                    <%= __('Case No') %>
-                                </th>
-                                <th >
-                                    <%= __('Part No') %>
-                                </th>
-                                <th >
-                                    <%= __('Number of boxes') %>
-                                </th>
-                                <th >
-                                    <%= __('Real') %>
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
+        
         </div>
 
 
        
         <script> fn_compare_();</script>
 
+<!-- ---------------table 1----------------------- -->
         <script> fn_plc_data_Show();</script>
         <script> fn_plc_data_Show_();</script>
-
         <script>fn_plc_data_By_Time_display();</script>
         <script>fn_excel_display_plc_data();</script>
 
-         <!-- <script> fn_import_Show();</script> -->
-         <script> fn_import_Show_();</script>
+<!-- ---------------table 2----------------------- -->
+        <!-- <script> fn_import_Show();</script> -->
+        <script> fn_import_Show_();</script>
+        <script> fn_import_By_Time_display();</script>
 
-        <script>fn_import_By_Time_display();</script>
-
-        
+<!-- ---------------table 3----------------------- -->
+         
         <script>
             const locale = {
               full: "<%= __('Full') %>",

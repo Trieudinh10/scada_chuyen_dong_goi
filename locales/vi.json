@@ -20,5 +20,10 @@
 	"Monitor": "Theo dõi",
 	"Data": "Dữ liệu",
 	"User": "Người dùng",
-	"Home": "Trang chủ"
+	"Home": "Trang chủ",
+	"Result": "Kết quả",
+	"Select Case No": "Chọn mã kiện",
+	"Select Result": "Chọn kết quả",
+	"Select Part No": "Chọn mã thùng",
+	"_Refresh": "_Refresh"
 }

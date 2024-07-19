@@ -4,10 +4,10 @@
   /* height: 100%; */
   /* background-color: bisque; */
   display: flex;
-  /* align-items: center;
-    justify-content: center; */
+  /* align-items: center; */
+    justify-content: center;
 }
-.block_ {
+.block_,.block_1 {
   height: 70%;
   display: flex;
   position: relative;
@@ -17,6 +17,10 @@
   border: 1px solid black;
   margin-right: 5px;
   flex-direction: column;
+  border-radius: 5px;
+}
+.block_1 {
+  width: 100%;
 }
 .block_:first-child {
   /* background-color: aquamarine; */
@@ -24,11 +28,12 @@
   width: 20%;
 }
 .block_:nth-child(2) {
-  /* background-color: #cccccc; */
   width: 40%;
 }
+/* .block_:nth-child(3) {
+  width: 20%;
+} */
 .block_:last-child {
-  /* background-color: pink; */
   width: 40%;
   margin-right: 0px;
 }
@@ -48,7 +53,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 15px;
   text-align: center;
   margin-bottom: 5px;
   width: 90%;
@@ -68,6 +73,7 @@
   border-radius: 5px;
   border: 1px solid black;
   text-align: center;
+  font-size: 15px;
 }
 .searchInput_ {
   height: 35px;
@@ -79,55 +85,74 @@
   color: black;
 }
 
-.change_green{
-  background-color: rgb(0, 255, 0)
+.green_background {
+  background-color: rgb(0, 255, 0) !important;
+  color: black;
 }
-.change_red{
-  background-color: red;
+
+.red_background {
+  background-color: red !important;
+  /* color: white; */
+  color: black;
 }
-.change_yellow{
-  background-color: yellow;
+
+.yellow_background {
+  background-color: yellow !important;
+  color: black;
+}
+
+.aqua_background {
+  background-color: aqua;
+  color: black;
 }
 /* --------------------------------table------------------------- */
 
 #div_table_plc_data,
-#div_table_import {
+#div_table_import,
+#div_table_import_selector{
   overflow-y: scroll;
   width: 100%;
   height: 100%;
 }
 
 #table_plc_data,
-#table_import {
+#table_import,
+#table_import_selector {
   text-align: center;
   border-collapse: collapse;
   width: 100%;
 }
 #table_plc_data tr,
-#table_import tr {
+#table_import tr,
+#table_import_slector tr  {
   cursor: pointer;
 }
 
 #table_plc_data tr:hover td,
-#table_import tr:hover td {
-  background-color: #19cece;
+#table_import tr:hover td,
+#table_import_selector tr:hover td  {
+  /* background-color: #19cece; */
+  background-color: #cccc;
 }
 #table_plc_data thead th,
-#table_import thead th {
+#table_import thead th,
+#table_import_selector thead th {
   position: sticky;
   top: -1px;
   border: 1px solid black;
 }
 #table_plc_data th,
-#table_import th {
+#table_import th,
+#table_import_selector th  {
   background-color: rgb(255, 211, 17);
   border: 1px solid black;
   padding: 5px 2px;
   font-size: 15px;
-  width: 25%;
+  width: 20%;
 }
 #table_plc_data td,
-#table_import td {
+#table_import td,
+#table_import_selector td {
   width: 70px;
   border: 1px solid rgb(0, 0, 0);
   padding: 5px 2px;
