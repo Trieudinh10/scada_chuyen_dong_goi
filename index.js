@@ -157,7 +157,7 @@ function valuesReady(anythingBad, values) {
   if (anythingBad) { console.log("Lỗi khi đọc dữ liệu tag"); } // Cảnh báo lỗi
   var lodash = require('lodash'); // Chuyển variable sang array
   arr_tag_value = lodash.map(values, (item) => item);
-  // console.log("Data S1", arr_tag_value); // Hiển thị giá trị để kiểm tra
+  console.log("Data S1", arr_tag_value); // Hiển thị giá trị để kiểm tra
   obj_tag_value = values;
 }
 
@@ -177,7 +177,7 @@ function fn_read_data_scan() {
 // Time cập nhật mỗi 1s
 setInterval(
   () => fn_read_data_scan(),
-  150// 1s = 1000ms
+  1000// 1s = 1000ms
 );
  
 let com_data = [];
@@ -230,9 +230,9 @@ function fn_tag() {
   // --------------Fn Part No ----------------- //
   const char_data_array = convertToCharArray(data_keys);
   const char_data = char_data_array.join('');
-  // console.log("Array Part No:", char_data_array);
-  // console.log("Value Part No:", char_data);
-  // emitEvents(data_keys, char_data_array);
+  console.log("Array Part No:", char_data_array);
+  console.log("Value Part No:", char_data);
+  emitEvents(data_keys, char_data_array);
   let com_data = char_data; 
   obj_tag_value["com_data"] = com_data;
   io.sockets.emit("com_data", com_data);
@@ -240,8 +240,8 @@ function fn_tag() {
   // --------------Fn Case No ----------------- //
   const char_data_case_array = convertToCharArray(data_case_keys);
   const char_data_case = char_data_case_array.join('');
-  // console.log("Array Case No:", char_data_case_array);
-  // console.log("Value Case No:", char_data_case);
+  console.log("Array Case No:", char_data_case_array);
+  console.log("Value Case No:", char_data_case);
   let com_data_case = char_data_case;  
   // emitEvents(data_case_keys, char_data_case_array);
   obj_tag_value["com_data_case"] = com_data_case;
@@ -259,7 +259,7 @@ function fn_tag() {
 
 
 let old_com_data = "";
-let so_luong_box = 1;
+let so_luong_box = "";
 let oldTrigData = 0;
 
 function plc_tag() {
@@ -273,10 +273,11 @@ function plc_tag() {
   // Dữ liệu đọc từ các tag
   so_luong_box = parseInt(obj_tag_value["so_luong_box"]) || 0;
   let com_data = obj_tag_value["com_data"];
+  let com_data_case = obj_tag_value["com_data_case"];
 
   // Chèn dữ liệu mới khi com_data thay đổi
   if (com_data !== old_com_data) {
-    var insertQuery = `INSERT INTO ${sqltable_Name} (date_time, so_luong_box, com_data) VALUES (${timeNow_toSQL}, '${so_luong_box}', '${com_data}');`;
+    var insertQuery = `INSERT INTO ${sqltable_Name} (date_time, so_luong_box, com_data, com_data_case) VALUES (${timeNow_toSQL}, '${so_luong_box}', '${com_data}', '${com_data_case}');`;
     connection.query(insertQuery, function (err, result) {
       if (err) {
         console.log('SQL Error:', err);
