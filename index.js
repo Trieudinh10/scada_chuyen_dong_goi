@@ -275,14 +275,40 @@ function plc_tag() {
   let com_data = obj_tag_value["com_data"];
   let com_data_case = obj_tag_value["com_data_case"];
 
-  // Chèn dữ liệu mới khi com_data thay đổi
+  // Log để kiểm tra giá trị của com_data
+  console.log('Current com_data:', com_data);
+
+  // Chèn dữ liệu mới hoặc cập nhật so_luong_box khi com_data thay đổi
   if (com_data !== old_com_data) {
-    var insertQuery = `INSERT INTO ${sqltable_Name} (date_time, so_luong_box, com_data, com_data_case) VALUES (${timeNow_toSQL}, '${so_luong_box}', '${com_data}', '${com_data_case}');`;
-    connection.query(insertQuery, function (err, result) {
+    // Kiểm tra xem com_data đã tồn tại chưa
+    var checkQuery = `SELECT * FROM ${sqltable_Name} WHERE com_data = '${com_data}';`;
+    connection.query(checkQuery, function (err, result) {
       if (err) {
         console.log('SQL Error:', err);
       } else {
-        console.log('SQL Insert Result:', result);
+        if (result.length > 0) {
+          // com_data đã tồn tại, cập nhật so_luong_box
+          var updateQuery = `UPDATE ${sqltable_Name} SET so_luong_box = so_luong_box + ${so_luong_box}, date_time = ${timeNow_toSQL}, com_data_case = '${com_data_case}' WHERE com_data = '${com_data}';`;
+          console.log('Update Query:', updateQuery); // Log truy vấn cập nhật
+          connection.query(updateQuery, function (err, result) {
+            if (err) {
+              console.log('SQL Error:', err);
+            } else {
+              console.log('SQL Update Result:', result);
+            }
+          });
+        } else {
+          // com_data chưa tồn tại, chèn hàng mới
+          var insertQuery = `INSERT INTO ${sqltable_Name} (date_time, so_luong_box, com_data, com_data_case) VALUES (${timeNow_toSQL}, '${so_luong_box}', '${com_data}', '${com_data_case}');`;
+          console.log('Insert Query:', insertQuery); // Log truy vấn chèn
+          connection.query(insertQuery, function (err, result) {
+            if (err) {
+              console.log('SQL Error:', err);
+            } else {
+              console.log('SQL Insert Result:', result);
+            }
+          });
+        }
       }
     });
     old_com_data = com_data;
@@ -290,7 +316,8 @@ function plc_tag() {
 
   // Kiểm tra và cập nhật so_luong_box nếu Trig_Data chuyển từ 0 sang 1
   if (obj_tag_value["Trig_Data"] === 1 && oldTrigData === 0) {
-    var updateQuery = `UPDATE ${sqltable_Name} SET so_luong_box = so_luong_box + 1 WHERE com_data = '${com_data}'`;
+    var updateQuery = `UPDATE ${sqltable_Name} SET so_luong_box = so_luong_box + 1 WHERE com_data = '${com_data}';`;
+    console.log('Trig_Data Update Query:', updateQuery); // Log truy vấn cập nhật khi Trig_Data = 1
     connection.query(updateQuery, function (err, result) {
       if (err) {
         console.log('SQL Error:', err);
@@ -312,6 +339,8 @@ function plc_tag() {
   oldTrigData = obj_tag_value["Trig_Data"];
   // console.log('oldTrigData:', oldTrigData);
 }
+
+
 
 // HÀM GHI DỮ LIỆU XUỐNG PLC
 function valuesWritten(anythingBad) {
