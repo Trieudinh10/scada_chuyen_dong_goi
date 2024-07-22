@@ -25,5 +25,8 @@
 	"Select Case No": "Chọn mã kiện",
 	"Select Result": "Chọn kết quả",
 	"Select Part No": "Chọn mã thùng",
-	"_Refresh": "_Refresh"
+	"Scanned": "Đã quét",
+	"Box": "Thùng",
+	"Unscanned": "Chưa quét",
+	"Number of scanned and unscanned boxes": "Số thùng đã quét và chưa quét"
 }

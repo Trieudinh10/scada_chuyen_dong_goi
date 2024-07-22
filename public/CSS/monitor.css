@@ -23,7 +23,6 @@
   width: 100%;
 }
 .block_:first-child {
-  /* background-color: aquamarine; */
   flex-direction: column;
   width: 20%;
 }

@@ -171,13 +171,16 @@ function fn_read_data_scan() {
   func_main_all_Q.fn_main_search_import(io,obj_tag_value);
   func_main_all_Q.fn_main_compare(io,obj_tag_value);
   func_main_all_Q.fn_main_update();
+  func_main_all_Q.fn_main_sum_box(io);
+  func_main_all_Q.fn_main_sum_caseNo(io);
+  func_main_all_Q.fn_main_update_trig_case(io,obj_tag_value);
   //------------------------------------------------- DEV_Q----------------------------------------- //
 }
  
 // Time cập nhật mỗi 1s
 setInterval(
   () => fn_read_data_scan(),
-  150// 1s = 1000ms
+  200// 1s = 1000ms
 );
  
 let com_data = [];
