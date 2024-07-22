@@ -7,12 +7,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/test_Q.css">
+    <link rel="stylesheet" href="/css/home.css">
     <title><%= __('Data') %></title>
     <script src = "js/FC_Common.js"></script>
     <script src="/js/canvasjs.min.js"></script>
     <script src = "socket.io/socket.io.js"></script>
     <script src = "js/jquery-3.6.0.min.js"></script>
+    <script src = "js/chart_home.js"></script>
     
      
     
@@ -25,12 +26,36 @@
 <body>
     <%- include ('./partials/sidebar') %>
         <div class="cnt_">
-             <p>xxxxxx</p>
+            <div class="item_">
+                <input id="sum_sl_box" class="iofield_" disabled="disabled" type="text" />               
+            </div>
+            <div class="item_">
+                <input id="sum_sl_real" class="iofield_" disabled="disabled" type="text" />               
+            </div>
+            <div class="item_">
+                <input id="sum_caseNo" class="iofield_" disabled="disabled" type="text" />               
+            </div>
+
+            <div id="chart_all_box" class="chart"></div>
+           
       </div>
 
 
 
+      <script> chart_box("chart_all_box",
+      "<%= __('Number of scanned and unscanned boxes') %>",
+      "<%= __('Scanned') %>:",
+      "<%= __('Unscanned') %>:",
+        "<%= __('Box') %>"); 
+      </script>
 
+      <!-- <script> chart("chart_all_case",
+        "<%= __('Number of scanned and unscanned boxes') %>",
+        "<%= __('Scanned') %>:",
+        "<%= __('Unscanned') %>:",
+          "<%= __('Box') %>"); 
+        </script> -->
+    <script>fn_home();</script>
 
 </body>
 

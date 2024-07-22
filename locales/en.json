@@ -25,5 +25,10 @@
 	"Result": "Result",
 	"Select Case No": "Select Case No",
 	"Select Result": "Select Result",
-	"Select Part No": "Select Part No"
+	"Select Part No": "Select Part No",
+	"Scanned": "Scanned",
+	"Not Scanned": "Not Scanned",
+	"Box": "Box",
+	"Number of scanned and unscanned boxes": "Number of scanned and unscanned boxes",
+	"Unscanned": "Unscanned"
 }

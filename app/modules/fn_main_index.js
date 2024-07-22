@@ -159,6 +159,122 @@ module.exports.fn_main_update = function () {
 };
 
 
+module.exports.fn_main_sum_box = function (io) {
+  var sqltable_Name = "import_excel"; // Tên bảng
+  var fields = ["SL_Box", "SL_Real"]; // Các trường cần lấy
+  var Query = "SELECT ?? FROM ??";
+
+  connection.query(Query, [fields, sqltable_Name], function (err, results) {
+    if (err) {
+      console.log(err);
+    } else {
+      let totalSL_Box = 0;
+      let totalSL_Real = 0;
+
+      results.forEach(row => {
+        const slBox = parseInt(row.SL_Box, 10);
+        const slReal = parseInt(row.SL_Real, 10);
+
+        if (!isNaN(slBox)) {
+          totalSL_Box += slBox;
+        }
+
+        if (!isNaN(slReal)) {
+          totalSL_Real += slReal;
+        }
+      });                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+
+      // console.log('Tổng SL_Box:', totalSL_Box);
+      // console.log('Tổng SL_Real:', totalSL_Real);
+      io.sockets.emit("sum_box", { totalSL_Box: totalSL_Box, totalSL_Real: totalSL_Real });
+    }
+  });
+};
+
+module.exports.fn_main_sum_caseNo = function (io) {
+  var sqltable_Name = "import_excel"; // Tên bảng
+  var fields = "Case_No"; // Các trường cần lấy
+  var Query = "SELECT ?? FROM ??";
+
+  connection.query(Query, [fields, sqltable_Name], function (err, results) {
+    if (err) {
+      console.log(err);
+    } else {
+      let uniqueCaseNos = new Set();
+      
+      results.forEach(row => {
+        uniqueCaseNos.add(row.Case_No);
+      });
+
+      let total_caseNo = uniqueCaseNos.size;
+      //  console.log('Tổng caseNo:', total_caseNo);
+      io.sockets.emit("sum_case_no", total_caseNo );
+    }
+  });
+};
+
+
+module.exports.fn_main_update_trig_case = function(io, obj_tag_value) {
+  let trig_case = obj_tag_value["Trig_Kien"]; // Biến thay đổi
+  const sqlTableName = "trig_case"; // Tên bảng
+  const countField = "Trig_case_count"; // Trường đếm số lượng
+
+  // Tạo biến toàn cục để lưu giá trị trước đó của trig_case
+  if (typeof global.trig_case_old === 'undefined') {
+    global.trig_case_old = 0;
+  }
+
+  // Kiểm tra nếu bảng có dữ liệu hay không
+  const checkSql = `SELECT COUNT(*) AS count FROM ${sqlTableName}`;
+  connection.query(checkSql, function(err, results) {
+    if (err) {
+      console.error('Error checking data:', err);
+      return;
+    }
+
+    if (results[0].count === 0) {
+      // Nếu không có dữ liệu, chèn dữ liệu ban đầu với giá trị count là 0
+      const initialInsertValue = 0;
+      // console.log("Initial Insert Value:", initialInsertValue); // Log giá trị insert ban đầu
+      const insertSql = `INSERT INTO ${sqlTableName} (${countField}) VALUES (${initialInsertValue})`;
+      connection.query(insertSql, function(err, results) {
+        if (err) {
+          console.error('Error inserting data:', err);
+          return;
+        }
+        // console.log('Initial data inserted successfully:', results);
+
+        // Cập nhật giá trị của trig_case_old thành giá trị hiện tại của trig_case
+        global.trig_case_old = trig_case;
+      });
+    } else {
+      // Kiểm tra nếu trig_case thay đổi từ 0 lên 1 và chỉ cập nhật khi thay đổi này xảy ra
+      if (trig_case === 1 && global.trig_case_old === 0) {
+        // Nếu có dữ liệu, tăng giá trị count lên 1
+        const updateSql = `UPDATE ${sqlTableName} SET ${countField} = ${countField} + 1`;
+        connection.query(updateSql, function(err, results) {
+          if (err) {
+            console.error('Error updating data:', err);
+            return;
+          }
+          // console.log('Data updated successfully:', results);
+        });
+      }
+
+      // Cập nhật giá trị của trig_case_old thành giá trị hiện tại của trig_case
+      global.trig_case_old = trig_case;
+    }
+  });
+};
+
+
+
+
+
+
+
+
+ 
 
 
 
